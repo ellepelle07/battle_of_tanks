@@ -121,6 +121,7 @@ class Menu:
                         self.__show_instructions()
 
                     if event.key == pygame.K_ESCAPE:
+                        instruction_enabled = False
                         self.__show_menu()
 
             clock.tick(25)

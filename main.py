@@ -1,5 +1,4 @@
 import pygame
-import sys
 from menu import Menu
 import tank_selection
 import game
@@ -50,7 +49,6 @@ def start_game():
             current_state = "menu"
 
     pygame.quit()
-    sys.exit()
 
 if __name__ == "__main__":
     start_game()

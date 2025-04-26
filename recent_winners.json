@@ -3,5 +3,10 @@
         "name": "Spelare 2",
         "tank": "T-34",
         "country": "Sovjet"
+    },
+    {
+        "name": "Spelare 2",
+        "tank": "T-34",
+        "country": "Sovjet"
     }
 ]
