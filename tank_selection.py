@@ -152,7 +152,3 @@ class TankSelection:
 def select_tank(screen):
     ts = TankSelection(screen)
     return ts.run()
-
-if __name__ == "__main__":
-    import main
-    main.start_game()

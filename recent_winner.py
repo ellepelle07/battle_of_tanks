@@ -83,8 +83,3 @@ def show_winner(screen):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-
-
-if __name__ == "__main__":
-    import main
-    main.start_game()

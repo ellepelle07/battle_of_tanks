@@ -78,8 +78,3 @@ def main_menu(screen):
                     return "instructions"
 
     return "quit"
-
-
-if __name__ == "__main__":
-    import main
-    main.start_game()

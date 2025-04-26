@@ -221,8 +221,3 @@ def start_battle(selected_tanks, screen):
     msg.draw(screen)
     pygame.display.flip()
     pygame.time.wait(3000)
-
-
-if __name__ == "__main__":
-    import main
-    main.start_game()
