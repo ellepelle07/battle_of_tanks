@@ -185,7 +185,7 @@ def start_battle(selected_tanks, screen):
         if projectile:
             projectile.draw(screen)
 
-        for ex in explosions_active[:]:
+        for ex in explosions_active:
             ex.update(dt)
             ex.draw(screen)
             if ex.finished:
@@ -203,16 +203,16 @@ def start_battle(selected_tanks, screen):
             running = False
 
     # ======== SLUTSCEN & SPARA RECENT WINNER ========
-    if left_tank.is_dead() and not right_tank.is_dead():
-        winner_name, winner_tank, winner_score = "Spelare 2", right_tank.name, right_tank.hp
-    elif right_tank.is_dead() and not left_tank.is_dead():
-        winner_name, winner_tank, winner_score = "Spelare 1", left_tank.name, left_tank.hp
+    if left_tank.is_dead():
+        winner_name, winner_tank = "Spelare 2", right_tank.name
+    elif right_tank.is_dead():
+        winner_name, winner_tank = "Spelare 1", left_tank.name
     else:
         winner_name = None
 
     if winner_name:
         country = "USA" if winner_tank in ("M1 Abrams","Sherman M4A3E8") else "Sovjet"
-        recent_winner.save_recent_winner(winner_name, winner_score, winner_tank, country)
+        recent_winner.save_recent_winner(winner_name, winner_tank, country)
 
     # Visa vinnarmeddelande
     msg = Text(f"{winner_name or 'Ingen'} vann!", None, 60, BLACK,

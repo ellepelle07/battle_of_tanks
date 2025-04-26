@@ -1,31 +1,32 @@
 [
     {
+        "name": "Spelare 2",
+        "tank": "T-34",
+        "country": "Sovjet"
+    },
+    {
         "name": "Spelare 1",
-        "score": 50,
+        "HP left": 50,
         "tank": "Sherman M4A3E8",
         "country": "USA"
     },
     {
         "name": "Spelare 1",
-        "score": 100,
         "tank": "Sherman M4A3E8",
         "country": "USA"
     },
     {
         "name": "Spelare 2",
-        "score": 50,
         "tank": "T-34",
         "country": "Sovjet"
     },
     {
         "name": "Spelare 2",
-        "score": 25,
         "tank": "T-34",
         "country": "Sovjet"
     },
     {
         "name": "Spelare 2",
-        "score": 50,
         "tank": "T-34",
         "country": "Sovjet"
     }

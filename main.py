@@ -4,6 +4,7 @@ import menu
 import tank_selection
 import game
 import instructions
+import recent_winner
 
 pygame.init()
 
@@ -30,7 +31,7 @@ def start_game():
     clock = pygame.time.Clock()
 
     while running:
-        # Hantera globala quit- och navigationstangenter
+        # Hantera tangenttryck
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -62,7 +63,7 @@ def start_game():
             instructions.draw_instructions(screen, SCREEN_WIDTH)
 
         elif current_state == "show_recent_winner":
-            menu.show_winner(screen)
+            recent_winner.show_winner(screen)
             current_state = "menu"
 
         clock.tick(60)

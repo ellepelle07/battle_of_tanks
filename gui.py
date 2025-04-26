@@ -13,10 +13,17 @@ class Button:
 
     def draw(self, screen, is_selected):
         color = GREEN if is_selected else GRAY
+
+        # Rita knappens rect. vilken skärm, färg, strolek och kant radie?
         pygame.draw.rect(screen, color, self.rect, border_radius=15)
+
+        # Fyll textruta (font) med text
         text_surface = self.font.render(self.text, True, WHITE)
-        text_rect = text_surface.get_rect(center=self.rect.center)
+
+        # Ge texten en rektangel för underlättad positionering
+        text_rect = text_surface.get_rect(center=self.rect.center) # get_rect = En rektangel som skapas exakt runt fonten/texten
         screen.blit(text_surface, text_rect)
+
 
 class Text:
     def __init__(self, text, font_path, font_size, color, x, y):
@@ -26,30 +33,18 @@ class Text:
         self.color = color
         self.x = x
         self.y = y
+        self.text_surface = None
+        self.rect = None
         self.font = pygame.font.Font(font_path, font_size)
         self.update_surface()
 
     def update_surface(self):
-        self.surface = self.font.render(self.text, True, self.color)
-        self.rect = self.surface.get_rect(topleft=(self.x, self.y))
+        self.text_surface = self.font.render(self.text, True, self.color)
+        self.rect = self.text_surface.get_rect(topleft=(self.x, self.y))
 
     def draw(self, screen):
-        screen.blit(self.surface, self.rect)
+        screen.blit(self.text_surface, self.rect)
 
     def set_text(self, new_text):
         self.text = new_text
-        self.update_surface()
-
-    def set_color(self, new_color):
-        self.color = new_color
-        self.update_surface()
-
-    def set_position(self, x, y):
-        self.x = x
-        self.y = y
-        self.update_surface()
-
-    def set_font_size(self, new_size):
-        self.font_size = new_size
-        self.font = pygame.font.Font(self.font_path, self.font_size)
         self.update_surface()
