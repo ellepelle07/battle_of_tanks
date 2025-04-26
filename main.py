@@ -1,9 +1,8 @@
 import pygame
 import sys
-import menu
+from menu import Menu
 import tank_selection
 import game
-import instructions
 import recent_winner
 
 pygame.init()
@@ -16,41 +15,28 @@ GREEN = (0, 200, 0)
 GRAY = (150, 150, 150)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Battle of Tanks - Elias El Shobaki")
+pygame.display.set_caption("Battle of Tanks - by Elias El Shobaki - Copyright (C) 2025")
 
 # Ladda profilbild
 profile_picture = pygame.image.load("assets/images/profile_picture.jpg")
 profile_picture = pygame.transform.scale(profile_picture, (198, 300))
 
 # Initiera menyn (bakgrundsbild)
-menu.init_menu(SCREEN_WIDTH, SCREEN_HEIGHT)
+menu = Menu(screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 
 def start_game():
     running = True
     current_state = "menu"
-    clock = pygame.time.Clock()
 
     while running:
-        # Hantera tangenttryck
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_l and current_state == "menu":
-                    current_state = "instructions"
-                elif event.key == pygame.K_m and current_state == "instructions":
-                    current_state = "menu"
-
         # Tillstånd
         if current_state == "menu":
-            action = menu.main_menu(screen)
-            if action == "select_tank":
+            menu_action = menu.get_action()
+            if menu_action == "select_tank":
                 current_state = "select_tank"
-            elif action == "instructions":
-                current_state = "instructions"
-            elif action == "show_recent_winner":
+            elif menu_action == "show_recent_winner":
                 current_state = "show_recent_winner"
-            elif action == "quit":
+            elif menu_action == "quit":
                 running = False
 
         elif current_state == "select_tank":
@@ -59,14 +45,9 @@ def start_game():
                 game.start_battle(selected_tanks, screen)
                 current_state = "menu"
 
-        elif current_state == "instructions":
-            instructions.draw_instructions(screen, SCREEN_WIDTH)
-
         elif current_state == "show_recent_winner":
             recent_winner.show_winner(screen)
             current_state = "menu"
-
-        clock.tick(60)
 
     pygame.quit()
     sys.exit()
