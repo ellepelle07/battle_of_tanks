@@ -41,21 +41,15 @@ class Menu:
             gui.Text("Tryck 'H' för mer information om spelet", None, 25, WHITE, 20, 640),
         ]
 
+        # Rita instruktionstexterna
+        for text in instructions_text:
+            text.draw(self.screen)
+
         # Skapa knappar – notera att knappen för "Senaste Vinnare" nu bara skickar en signal
         self.buttons = [
             gui.Button("Välj Stridsvagn", 300, 240, 200, 50, button_font),
             gui.Button("Senaste Vinnare", 300, 310, 200, 50, button_font),
         ]
-
-        # Rita instruktionstexterna
-        for text in instructions_text:
-            text.draw(self.screen)
-
-        # Hantera knappmarkering baserat på musposition
-        mouse_pos = pygame.mouse.get_pos()
-        for button in self.buttons:
-            is_selected = button.rect.collidepoint(mouse_pos)
-            button.draw(self.screen, is_selected)
 
         pygame.display.flip()
 
@@ -95,8 +89,18 @@ class Menu:
         pygame.display.flip()
 
     def get_action(self):
+        clock = pygame.time.Clock()
+        instruction_enabled = False
         self.__show_menu()
         while True:
+            if not instruction_enabled:
+                # Hantera knappmarkering baserat på musposition
+                mouse_pos = pygame.mouse.get_pos()
+                for button in self.buttons:
+                    is_selected = button.rect.collidepoint(mouse_pos)
+                    button.draw(self.screen, is_selected)
+                pygame.display.flip()
+
             # Hantera tangenttryck
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -113,9 +117,10 @@ class Menu:
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_h:
+                        instruction_enabled = True
                         self.__show_instructions()
+
                     if event.key == pygame.K_ESCAPE:
                         self.__show_menu()
 
-            # Sov lite för att inte dra CPU
-            time.sleep(0.5)
+            clock.tick(25)

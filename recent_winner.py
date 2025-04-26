@@ -25,9 +25,7 @@ def save_recent_winner(winner_name, tank, country):
     Sparar en vinnare i JSON-filen med de senaste vinnarna.
     Filen måste existera och innehålla giltig JSON-data.
     """
-    with open(RECENT_WINNERS_FILE, 'r') as file:
-        recent_winners = json.load(file)
-
+    recent_winners = get_recent_winners()
     recent_winners.append({
         'name': winner_name,
         'tank': tank,
@@ -43,9 +41,12 @@ def get_recent_winners():
     """
     Hämtar de senaste vinnarna från JSON-filen.
     """
-    with open(RECENT_WINNERS_FILE, 'r') as file:
-        return json.load(file)
-
+    try:
+        with open(RECENT_WINNERS_FILE, 'r') as file:
+            winners = json.load(file)
+            return winners
+    except Exception:
+        return []
 
 def show_winner(screen):
     """
@@ -58,11 +59,10 @@ def show_winner(screen):
     y_offset = 150
     winner_texts = []
 
-    print(winners)
-#    for i, w in enumerate(winners):
- #       text = f"{i+1}. {w['name']} – {w['tank']} {w['country']}"
-  #      winner_texts.append(gui.Text(text, None, 30, BLACK, 100, y_offset))
-   #     y_offset += 40
+    for i, w in enumerate(winners):
+        text = f"{i+1}. {w['name']} – {w['tank']} {w['country']}"
+        winner_texts.append(gui.Text(text, None, 30, BLACK, 100, y_offset))
+        y_offset += 40
 
     back_text = gui.Text("Tryck ESC för att gå tillbaka", None, 25, BLACK, 100, y_offset + 30)
 
