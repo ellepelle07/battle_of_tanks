@@ -108,15 +108,17 @@ class TankSelection:
         self.screen.blit(self.damage_symbol, dmg_rect1)
         self.screen.blit(self.damage_symbol, dmg_rect2)
 
-        # Rita markeringsramar vid hover
+        # Rita markeringsramar vid hover och om tanken är vald
         mouse_pos = pygame.mouse.get_pos()
-        if self.player1_tank1_rect.collidepoint(mouse_pos):
+        # För spelare 1
+        if self.player1_tank1_rect.collidepoint(mouse_pos) or self.selection[0] == "M1 Abrams":
             pygame.draw.rect(self.screen, HOVER_BORDER, self.player1_tank1_rect, 4)
-        if self.player1_tank2_rect.collidepoint(mouse_pos):
+        if self.player1_tank2_rect.collidepoint(mouse_pos) or self.selection[0] == "Sherman M4A3E8":
             pygame.draw.rect(self.screen, HOVER_BORDER, self.player1_tank2_rect, 4)
-        if self.player2_tank1_rect.collidepoint(mouse_pos):
+        # För spelare 2
+        if self.player2_tank1_rect.collidepoint(mouse_pos) or self.selection[1] == "T-90":
             pygame.draw.rect(self.screen, HOVER_BORDER, self.player2_tank1_rect, 4)
-        if self.player2_tank2_rect.collidepoint(mouse_pos):
+        if self.player2_tank2_rect.collidepoint(mouse_pos) or self.selection[1] == "T-34":
             pygame.draw.rect(self.screen, HOVER_BORDER, self.player2_tank2_rect, 4)
 
         pygame.display.flip()
