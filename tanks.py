@@ -1,6 +1,5 @@
 import pygame
 import math
-from shared.constants import *
 
 class Tank(pygame.sprite.Sprite):
     def __init__(self, name, max_hp, damage, x, y, image_path, facing=1, max_fuel=100):

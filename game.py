@@ -3,10 +3,11 @@ import sys
 import math
 from gui import Text
 import tanks
-import recent_winner      # Använd nya recent_winner-modulen
-import explosions         # Explosion‑klassen används korrekt här
+import recent_winner
+import explosions
 from enum import Enum
 from shared.constants import *
+from puddle import IcePuddle
 
 # Inställningar
 AIM_LINE_LENGTH      = 320
@@ -57,6 +58,7 @@ def start_battle(selected_tanks, screen):
     clock = pygame.time.Clock()
     screen_width, screen_height = screen.get_size()
 
+    puddle = IcePuddle((screen_width // 2, GROUND_LEVEL))
 
     def create_tank(name, x, bottom_y, facing):
         # Sätt HP, damage och bränsle beroende på tank
@@ -114,6 +116,8 @@ def start_battle(selected_tanks, screen):
     running = True
     while running:
         screen.blit(background_image, (0, 0))
+        puddle.draw(screen)
+
         mouse_down_btn = False
 
         dt = clock.tick(60) / 1000.0
@@ -127,37 +131,52 @@ def start_battle(selected_tanks, screen):
 
         keys = pygame.key.get_pressed()
 
-        # Move
+        # MOVE-fasen
         if current_phase == GamePhases.MOVE:
             active = left_tank if current_player == 1 else right_tank
+
             if current_player == 1:
+                # Spelare 1: rörelse åt vänster
                 if keys[pygame.K_a]:
                     moved = active.move(-2)
-                    if moved and not engine_playing:
-                        engine_sound.play(loops=-1)  # Starta loopat ljud
-                        engine_playing = True
+                    if moved:  # Om rörelsen lyckades
+                        if not engine_playing:
+                            engine_sound.play(loops=-1)  # Starta motorljudet
+                            engine_playing = True
+                # Rörelse åt höger, endast om tanken inte krockar med pölen
                 if keys[pygame.K_d]:
-                    moved = active.move(2)
-                    if moved and not engine_playing:
-                        engine_sound.play(loops=-1)
-                        engine_playing = True
-                if not (keys[pygame.K_a] or keys[pygame.K_d]) and engine_playing:
-                    engine_sound.stop()
-                    engine_playing = False
+                    if not puddle.collides_with(active.rect):
+                        moved = active.move(2)
+                        if moved:  # Om rörelsen lyckades
+                            if not engine_playing:
+                                engine_sound.play(loops=-1)
+                                engine_playing = True
+                # Stoppa motorljudet om ingen tangent trycks
+                if not (keys[pygame.K_a] or keys[pygame.K_d]):
+                    if engine_playing:
+                        engine_sound.stop()
+                        engine_playing = False
             else:
-                if keys[pygame.K_LEFT]:
-                    moved = active.move(-2)
-                    if moved and not engine_playing:
-                        engine_sound.play(loops=-1)
-                        engine_playing = True
+                # Spelare 2: rörelse åt höger
                 if keys[pygame.K_RIGHT]:
                     moved = active.move(2)
-                    if moved and not engine_playing:
-                        engine_sound.play(loops=-1)
-                        engine_playing = True
-                if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]) and engine_playing:
-                    engine_sound.stop()
-                    engine_playing = False
+                    if moved:  # Om rörelsen lyckades
+                        if not engine_playing:
+                            engine_sound.play(loops=-1)  # Starta motorljudet
+                            engine_playing = True
+                # Rörelse åt vänster, endast om tanken inte krockar med puddlen
+                if keys[pygame.K_LEFT]:
+                    if not puddle.collides_with(active.rect):
+                        moved = active.move(-2)
+                        if moved:  # Om rörelsen lyckades
+                            if not engine_playing:
+                                engine_sound.play(loops=-1)
+                                engine_playing = True
+                # Stoppa motorljudet om ingen tangent trycks
+                if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]):
+                    if engine_playing:
+                        engine_sound.stop()
+                        engine_playing = False
 
             # Aim
             active = left_tank if current_player == 1 else right_tank
@@ -177,17 +196,6 @@ def start_battle(selected_tanks, screen):
             ex = sx + AIM_LINE_LENGTH * math.cos(rad)
             ey = sy - AIM_LINE_LENGTH * math.sin(rad)
             draw_dashed_line(screen, WHITE, (sx, sy), (ex, ey), 6)
-
-            # Beräkna och rita landningspunkt
-            # sim_dt = 0.02
-            # p = active.shoot()
-            # sim_x, sim_y = p.x, p.y
-            # sim_vx, sim_vy = p.vx, p.vy
-            # while sim_y < GROUND_LEVEL:
-            #     sim_x += sim_vx * sim_dt
-            #     sim_y += sim_vy * sim_dt + 0.5 * G * sim_dt**2
-            #     sim_vy += G * sim_dt
-            # pygame.draw.circle(screen, TARGET_AREA_COLOR, (int(sim_x), int(sim_y)), 10)
 
             if keys[pygame.K_SPACE] or mouse_down_btn:
                 current_phase = GamePhases.SHOOT
@@ -245,10 +253,8 @@ def start_battle(selected_tanks, screen):
     # Slutscen & spara 'recent winner'
     if left_tank.is_dead():
         winner_name, winner_tank = "Spelare 2", right_tank.name
-    elif right_tank.is_dead():
-        winner_name, winner_tank = "Spelare 1", left_tank.name
     else:
-        winner_name = None
+        winner_name, winner_tank = "Spelare 1", left_tank.name
 
     if winner_name:
         country = "USA" if winner_tank in ("M1 Abrams","Sherman M4A3E8") else "Ryssland"
