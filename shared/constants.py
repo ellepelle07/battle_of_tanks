@@ -1,0 +1,9 @@
+# Skärmstorlek
+SCREEN_WIDTH  = 1450
+SCREEN_HEIGHT = 700
+
+# Färger
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GREEN = (0, 200, 0)
+GRAY = (150, 150, 150)

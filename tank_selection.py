@@ -1,11 +1,10 @@
 import pygame
 import gui
+from shared.constants import *
 
-# Färger
-BLUE = (30, 20, 135)
+# Lokala färger
 RED = (255, 0, 0)
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+BLUE = (30, 20, 135)
 HOVER_BORDER = (255, 215, 0)  # Gyllene kant vid hover
 
 # Tankstorlekar
@@ -18,16 +17,18 @@ class TankSelection:
         self.screen_width, self.screen_height = screen.get_size()
 
         # Ladda och skala bilder för USA-tankar
-        self.tank1_image_usa = pygame.image.load("assets/sprites/M1_ABRAMS.png")
-        self.tank2_image_usa = pygame.image.load("assets/sprites/SHERMAN.png")
-        self.tank1_image_usa = pygame.transform.scale(self.tank1_image_usa, (TANK_WIDTH, TANK_HEIGHT))
-        self.tank2_image_usa = pygame.transform.scale(self.tank2_image_usa, (TANK_WIDTH, TANK_HEIGHT))
+        self.usa_tank1_img = pygame.image.load("assets/sprites/M1_ABRAMS.png")
+        self.usa_tank1_img = pygame.transform.scale(self.usa_tank1_img, (TANK_WIDTH, TANK_HEIGHT))
+        self.usa_tank1_img = pygame.transform.flip(self.usa_tank1_img, True, False)
+        self.usa_tank2_img = pygame.image.load("assets/sprites/SHERMAN.png")
+        self.usa_tank2_img = pygame.transform.scale(self.usa_tank2_img, (TANK_WIDTH, TANK_HEIGHT))
+        self.usa_tank2_img = pygame.transform.flip(self.usa_tank2_img, True, False)
 
-        # Ladda och skala bilder för Sovjet-tankar
-        self.tank1_image_soviet = pygame.image.load("assets/sprites/T90.png")
-        self.tank2_image_soviet = pygame.image.load("assets/sprites/T34.png")
-        self.tank1_image_soviet = pygame.transform.scale(self.tank1_image_soviet, (TANK_WIDTH, TANK_HEIGHT))
-        self.tank2_image_soviet = pygame.transform.scale(self.tank2_image_soviet, (TANK_WIDTH, TANK_HEIGHT))
+        # Ladda och skala bilder för ryska tankar
+        self.russia_tank1_img = pygame.image.load("assets/sprites/T90.png")
+        self.russia_tank1_img = pygame.transform.scale(self.russia_tank1_img, (TANK_WIDTH, TANK_HEIGHT))
+        self.russia_tank2_img = pygame.image.load("assets/sprites/T34.png")
+        self.russia_tank2_img = pygame.transform.scale(self.russia_tank2_img, (TANK_WIDTH, TANK_HEIGHT))
 
         # Ladda symbolbilder
         self.hp_symbol = pygame.image.load("assets/sprites/hp_symbol.png")
@@ -46,16 +47,16 @@ class TankSelection:
         bottom_y = 2 * self.screen_height // 3
 
         # Placera USA-tankar (spelare 1)
-        self.player1_tank1_rect = self.tank1_image_usa.get_rect(center=(left_center_x, top_y))
-        self.player1_tank2_rect = self.tank2_image_usa.get_rect(center=(left_center_x, bottom_y))
-        # Placera Sovjet-tankar (spelare 2)
-        self.player2_tank1_rect = self.tank1_image_soviet.get_rect(center=(right_center_x, top_y))
-        self.player2_tank2_rect = self.tank2_image_soviet.get_rect(center=(right_center_x, bottom_y))
+        self.player1_tank1_rect = self.usa_tank1_img.get_rect(center=(left_center_x, top_y))
+        self.player1_tank2_rect = self.usa_tank2_img.get_rect(center=(left_center_x, bottom_y))
+        # Placera ryska tankar (spelare 2)
+        self.player2_tank1_rect = self.russia_tank1_img.get_rect(center=(right_center_x, top_y))
+        self.player2_tank2_rect = self.russia_tank2_img.get_rect(center=(right_center_x, bottom_y))
 
         # Skapa textobjekt
-        self.title_text = gui.Text("Välj din Stridsvagn", None, 50, WHITE, self.screen_width // 2 - 150, 50)
+        self.title_text = gui.Text("Välj stridsvagn", None, 50, WHITE, self.screen_width // 2 - 150, 50)
         self.usa_label = gui.Text("USA", None, 40, WHITE, self.screen_width // 4 - 30, 50)
-        self.soviet_label = gui.Text("Sovjet", None, 40, WHITE, 3 * self.screen_width // 4 - 50, 50)
+        self.soviet_label = gui.Text("Ryssland", None, 40, WHITE, 3 * self.screen_width // 4 - 50, 50)
         self.tank1_title_usa = gui.Text("M1 Abrams", None, 30, WHITE, left_center_x - 50, top_y + TANK_HEIGHT // 2 + 10)
         self.tank2_title_usa = gui.Text("Sherman M4A3E8", None, 30, WHITE, left_center_x - 50, bottom_y + TANK_HEIGHT // 2 + 10)
         self.tank1_title_soviet = gui.Text("T-90", None, 30, WHITE, right_center_x - 50, top_y + TANK_HEIGHT // 2 + 10)
@@ -74,10 +75,10 @@ class TankSelection:
         self.title_text.draw(self.screen)
 
         # Rita stridsvagnarna
-        self.screen.blit(self.tank1_image_usa, self.player1_tank1_rect)
-        self.screen.blit(self.tank2_image_usa, self.player1_tank2_rect)
-        self.screen.blit(self.tank1_image_soviet, self.player2_tank1_rect)
-        self.screen.blit(self.tank2_image_soviet, self.player2_tank2_rect)
+        self.screen.blit(self.usa_tank1_img, self.player1_tank1_rect)
+        self.screen.blit(self.usa_tank2_img, self.player1_tank2_rect)
+        self.screen.blit(self.russia_tank1_img, self.player2_tank1_rect)
+        self.screen.blit(self.russia_tank2_img, self.player2_tank2_rect)
 
         # Rita tanktitlar
         self.tank1_title_usa.draw(self.screen)

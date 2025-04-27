@@ -3,7 +3,7 @@ import pygame
 # Flagga för att kontrollera om resurserna är laddade
 resources_loaded = False
 explosion_images = []
-explosion_sound = None
+explosion_sound: pygame.mixer.Sound
 
 def load_explosion_resources():
     global explosion_images, explosion_sound, resources_loaded

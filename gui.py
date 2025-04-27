@@ -1,9 +1,5 @@
 import pygame
-
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-GREEN = (0, 200, 0)
-GRAY = (150, 150, 150)
+from shared.constants import *
 
 class Button:
     def __init__(self, text, x, y, width, height, font):

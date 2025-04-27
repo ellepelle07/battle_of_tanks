@@ -5,21 +5,16 @@ from gui import Text
 import tanks
 import recent_winner      # Använd nya recent_winner-modulen
 import explosions         # Explosion‑klassen används korrekt här
-
-# Färger
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED   = (255, 0, 0)
-
-# Skärmstorlek
-SCREEN_WIDTH  = 1450
-SCREEN_HEIGHT = 700
+from enum import Enum
+from shared.constants import *
 
 # Inställningar
-AIM_LINE_LENGTH      = 350
+AIM_LINE_LENGTH      = 320
 GROUND_LEVEL         = SCREEN_HEIGHT - 90
 G                    = 300   # Gravitation i pixlar/sekund^2
 FUEL_BONUS_PER_ROUND = 10    # Bränslebonus varje hel runda
+TARGET_AREA_COLOR = (255, 0, 0)
+
 
 # Ladda bakgrundsbild
 background_image = pygame.image.load("assets/images/battlefield_background.jpg")
@@ -29,6 +24,27 @@ T90_IMG = "assets/sprites/T90.png"
 T34_IMG = "assets/sprites/T34.png"
 M1_ABRAMS_IMG = "assets/sprites/M1_ABRAMS.png"
 SHERMAN_IMG =  "assets/sprites/SHERMAN.png"
+
+class GamePhases(Enum):
+    MOVE = 1,
+    AIM = 2,
+    SHOOT = 3
+
+def draw_dashed_line(surface, color, start_pos, end_pos, dash_length=10):
+    x1, y1 = start_pos
+    x2, y2 = end_pos
+    dx = x2 - x1
+    dy = y2 - y1
+    distance = int((dx**2 + dy**2)**0.5)
+    dash_count = distance // dash_length
+
+    for i in range(dash_count):
+        start_x = x1 + (dx * i / dash_count)
+        start_y = y1 + (dy * i / dash_count)
+        end_x = x1 + (dx * (i + 0.5) / dash_count)
+        end_y = y1 + (dy * (i + 0.5) / dash_count)
+        pygame.draw.line(surface, color, (start_x, start_y), (end_x, end_y), 3)
+
 
 def start_battle(selected_tanks, screen):
     clock = pygame.time.Clock()
@@ -64,7 +80,7 @@ def start_battle(selected_tanks, screen):
     left_tank  = create_tank(selected_tanks[0], 100,            GROUND_LEVEL, facing=1)
     right_tank = create_tank(selected_tanks[1], screen_width-200, GROUND_LEVEL, facing=-1)
 
-    current_phase     = "move"
+    current_phase: GamePhases = GamePhases.MOVE
     current_player    = 1
     projectile        = None
     explosions_active = []
@@ -88,17 +104,22 @@ def start_battle(selected_tanks, screen):
 
     running = True
     while running:
+        screen.blit(background_image, (0, 0))
+        mouse_down_btn = False
+
         dt = clock.tick(60) / 1000.0
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_down_btn = True
 
         keys = pygame.key.get_pressed()
 
-        # ======== MOVE ========
-        if current_phase == "move":
+        # ======== MOVE & AIM ========
+        if current_phase == GamePhases.MOVE:
             active = left_tank if current_player == 1 else right_tank
             if current_player == 1:
                 if keys[pygame.K_a]:
@@ -110,11 +131,8 @@ def start_battle(selected_tanks, screen):
                     active.move(-2)
                 if keys[pygame.K_RIGHT]:
                     active.move(2)
-            if keys[pygame.K_RETURN]:
-                current_phase = "aim"
 
-        # ======== AIM ========
-        elif current_phase == "aim":
+            # ======== AIM ========
             active = left_tank if current_player == 1 else right_tank
             mx, my = pygame.mouse.get_pos()
             dx = mx - active.rect.centerx
@@ -131,25 +149,25 @@ def start_battle(selected_tanks, screen):
             sx, sy = active.rect.center
             ex = sx + AIM_LINE_LENGTH * math.cos(rad)
             ey = sy - AIM_LINE_LENGTH * math.sin(rad)
-            pygame.draw.line(screen, WHITE, (sx, sy), (ex, ey), 3)
+            draw_dashed_line(screen, WHITE, (sx, sy), (ex, ey), 6)
 
             # Beräkna och rita landningspunkt
-            sim_dt = 0.02
-            p = active.shoot()
-            sim_x, sim_y = p.x, p.y
-            sim_vx, sim_vy = p.vx, p.vy
-            while sim_y < GROUND_LEVEL:
-                sim_x += sim_vx * sim_dt
-                sim_y += sim_vy * sim_dt + 0.5 * G * sim_dt**2
-                sim_vy += G * sim_dt
-            pygame.draw.circle(screen, RED, (int(sim_x), int(sim_y)), 10)
+            # sim_dt = 0.02
+            # p = active.shoot()
+            # sim_x, sim_y = p.x, p.y
+            # sim_vx, sim_vy = p.vx, p.vy
+            # while sim_y < GROUND_LEVEL:
+            #     sim_x += sim_vx * sim_dt
+            #     sim_y += sim_vy * sim_dt + 0.5 * G * sim_dt**2
+            #     sim_vy += G * sim_dt
+            # pygame.draw.circle(screen, TARGET_AREA_COLOR, (int(sim_x), int(sim_y)), 10)
 
-            if keys[pygame.K_RETURN]:
-                current_phase = "shoot"
+            if keys[pygame.K_SPACE] or mouse_down_btn:
+                current_phase = GamePhases.SHOOT
 
         # ======== SHOOT ========
-        elif current_phase == "shoot":
-            if keys[pygame.K_SPACE] and projectile is None:
+        if current_phase == GamePhases.SHOOT:
+            if projectile is None:
                 shooter = left_tank if current_player == 1 else right_tank
                 projectile = shooter.shoot()
 
@@ -162,23 +180,18 @@ def start_battle(selected_tanks, screen):
                 target.take_damage(shooter.damage)
                 explosions_active.append(explosions.Explosion(projectile.x, projectile.y))
                 projectile = None
-                current_phase = "move"
+                current_phase = GamePhases.MOVE
                 end_turn()
             elif projectile.is_offscreen(screen_width, screen_height):
                 projectile = None
-                current_phase = "move"
+                current_phase = GamePhases.MOVE
                 end_turn()
 
         # ======== TEXT-ANVISNING ========
-        if current_phase == "move":
-            info_text.set_text(f"Spelare {current_player}: Flytta (ENTER för sikta)")
-        elif current_phase == "aim":
-            info_text.set_text(f"Spelare {current_player}: Rikta – ENTER för skjut")
-        else:
-            info_text.set_text(f"Spelare {current_player}: Tryck SPACE")
+        if current_phase == GamePhases.MOVE:
+            info_text.set_text(f"Spelare {current_player}: Flytta, sikta och tryck SPACE för att skjuta")
 
         # ======== RITA ALLT ========
-        screen.blit(background_image, (0, 0))
         left_tank.draw(screen)
         right_tank.draw(screen)
 
@@ -211,7 +224,7 @@ def start_battle(selected_tanks, screen):
         winner_name = None
 
     if winner_name:
-        country = "USA" if winner_tank in ("M1 Abrams","Sherman M4A3E8") else "Sovjet"
+        country = "USA" if winner_tank in ("M1 Abrams","Sherman M4A3E8") else "Ryssland"
         recent_winner.save_recent_winner(winner_name, winner_tank, country)
 
     # Visa vinnarmeddelande

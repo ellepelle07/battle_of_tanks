@@ -15,6 +15,7 @@ class Tank(pygame.sprite.Sprite):
         # Ladda och skala tankbilden
         self.image = pygame.image.load(image_path)
         self.image = pygame.transform.scale(self.image, (120, 70))
+        self.image = pygame.transform.flip(self.image, facing == 1, False)
         self.rect = self.image.get_rect(center=(x, y))
         # Projektilhastighet
         self.projectile_speed = 550

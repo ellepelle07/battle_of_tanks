@@ -1,15 +1,10 @@
 import json
 import pygame
 import gui
+from shared.constants import *
 
 # Initiera Pygame
 pygame.init()
-
-# Skärmstorlek
-SCREEN_WIDTH  = 1450
-SCREEN_HEIGHT = 700
-
-BLACK = (0, 0, 0)
 
 # Filväg för att lagra de senaste vinnarna
 RECENT_WINNERS_FILE = 'recent_winners.json'
@@ -60,7 +55,7 @@ def show_winner(screen):
     winner_texts = []
 
     for i, w in enumerate(winners):
-        text = f"{i+1}. {w['name']} – {w['tank']} {w['country']}"
+        text = f"{i+1}. {w['name']} – {w['country']} - {w['tank']} "
         winner_texts.append(gui.Text(text, None, 30, BLACK, 100, y_offset))
         y_offset += 40
 

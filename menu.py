@@ -1,11 +1,6 @@
-import time
 import pygame
 import gui
-
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-GREEN = (0, 200, 0)
-GRAY = (150, 150, 150)
+from shared.constants import *
 
 # Initiera Pygame:s mixer för ljudhantering
 pygame.mixer.init()
@@ -16,19 +11,17 @@ click_sound = pygame.mixer.Sound("assets/sound/click_sound.wav")
 class Menu:
     # Bakgrundsbilden för menyn
     war_image = None
-    screen_width = None
 
     # Konstanter
     SELECT_TANK = 1
     SHOW_RECENT_WINNERS = 2
     QUIT = 3
 
-    def __init__(self, screen, screen_width, screen_height):
+    def __init__(self, screen):
         self.screen = screen
         # Ladda och skala menyns bakgrundsbild
         self.war_image = pygame.image.load("assets/images/war_background.jpg")
-        self.war_image = pygame.transform.scale(self.war_image, (screen_width, screen_height))
-        self.screen_width = screen_width
+        self.war_image = pygame.transform.scale(self.war_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # Privat metod som bara får användas i denna klass
     def __show_menu(self):
@@ -63,10 +56,10 @@ class Menu:
         profile_picture = pygame.image.load("assets/images/profile_picture.jpg")
         profile_picture = pygame.transform.scale(profile_picture, (198, 300))
         # Rita profilbild och text
-        self.screen.blit(profile_picture, (self.screen_width - 400, 15))
-        gui.Text("CREDIT: Elias El Shobaki", None, 30, BLACK, self.screen_width - 400, 320).draw(self.screen)
-        gui.Text("Programmering 1", None, 30, BLACK, self.screen_width - 400, 360).draw(self.screen)
-        gui.Text("2025", None, 30, BLACK, self.screen_width - 400, 390).draw(self.screen)
+        self.screen.blit(profile_picture, (SCREEN_WIDTH - 400, 15))
+        gui.Text("CREDIT: Elias El Shobaki", None, 30, BLACK, SCREEN_WIDTH - 400, 320).draw(self.screen)
+        gui.Text("Programmering 1", None, 30, BLACK, SCREEN_WIDTH - 400, 360).draw(self.screen)
+        gui.Text("2025", None, 30, BLACK, SCREEN_WIDTH - 400, 390).draw(self.screen)
 
         instructions_text = [
             gui.Text("Om spelet:", "assets/fonts/gomarice_kamone_6.ttf", 40, BLACK, 20, 20),
