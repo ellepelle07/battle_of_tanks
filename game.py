@@ -138,7 +138,7 @@ def start_battle(selected_tanks, screen):
             if current_player == 1:
                 # Spelare 1: rörelse åt vänster
                 if keys[pygame.K_a]:
-                    moved = active.move(-2)
+                    moved = active.move(-1)
                     if moved:  # Om rörelsen lyckades
                         if not engine_playing:
                             engine_sound.play(loops=-1)  # Starta motorljudet
@@ -146,7 +146,7 @@ def start_battle(selected_tanks, screen):
                 # Rörelse åt höger, endast om tanken inte krockar med pölen
                 if keys[pygame.K_d]:
                     if not puddle.collides_with(active.rect):
-                        moved = active.move(2)
+                        moved = active.move(1)
                         if moved:  # Om rörelsen lyckades
                             if not engine_playing:
                                 engine_sound.play(loops=-1)
@@ -159,7 +159,7 @@ def start_battle(selected_tanks, screen):
             else:
                 # Spelare 2: rörelse åt höger
                 if keys[pygame.K_RIGHT]:
-                    moved = active.move(2)
+                    moved = active.move(1)
                     if moved:  # Om rörelsen lyckades
                         if not engine_playing:
                             engine_sound.play(loops=-1)  # Starta motorljudet
@@ -167,7 +167,7 @@ def start_battle(selected_tanks, screen):
                 # Rörelse åt vänster, endast om tanken inte krockar med puddlen
                 if keys[pygame.K_LEFT]:
                     if not puddle.collides_with(active.rect):
-                        moved = active.move(-2)
+                        moved = active.move(-1)
                         if moved:  # Om rörelsen lyckades
                             if not engine_playing:
                                 engine_sound.play(loops=-1)
