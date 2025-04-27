@@ -117,7 +117,7 @@ class Menu:
                         if button.rect.collidepoint(event.pos):
                             click_sound.play()
                             if button.text == "Välj Stridsvagn":
-                                self.menu_sound.stop()
+                                self.menu_channel.fadeout(2000)
                                 return self.SELECT_TANK
                             elif button.text == "Senaste Vinnare":
                                 return self.SHOW_RECENT_WINNERS

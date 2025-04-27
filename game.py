@@ -8,6 +8,7 @@ import explosions
 from enum import Enum
 from shared.constants import *
 from puddle import IcePuddle
+from random import randint
 
 # Inställningar
 AIM_LINE_LENGTH      = 320
@@ -91,7 +92,7 @@ def start_battle(selected_tanks, screen):
     right_tank = create_tank(selected_tanks[1], screen_width-200, GROUND_LEVEL, facing=-1)
 
     current_phase: GamePhases = GamePhases.MOVE
-    current_player    = 1
+    current_player    = randint(1, 2)  # Slumpa vilken spelar som börjar
 
     projectile        = None
     explosions_active = []
@@ -266,5 +267,5 @@ def start_battle(selected_tanks, screen):
     screen.fill(WHITE)
     msg.draw(screen)
     pygame.display.flip()
-    pygame.time.wait(3000)
-    battle_sound.stop()
+    battle_sound.fadeout(4000)
+    pygame.time.wait(4000)
