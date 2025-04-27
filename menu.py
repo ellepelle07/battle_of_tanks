@@ -25,6 +25,8 @@ class Menu:
         self.war_image = pygame.transform.scale(self.war_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
         self.menu_sound = pygame.mixer.Sound("assets/sound/menu_sound.mp3")
+        # Skapa en dedikerad kanal för menyljudet, så att vi inte spelar upp flera instanser samtidigt
+        self.menu_channel = pygame.mixer.Channel(1)
 
     # Privat metod som bara får användas i denna klass
     def __show_menu(self):
@@ -93,7 +95,9 @@ class Menu:
         clock = pygame.time.Clock()
         instruction_enabled = False
         self.__show_menu()
-        self.menu_sound.play(loops=-1)
+        # Spela menyljudet på den dedikerade kanalen endast om det inte redan spelar
+        if not self.menu_channel.get_busy():
+            self.menu_channel.play(self.menu_sound, loops=-1)
         while True:
             if not instruction_enabled:
                 # Hantera knappmarkering baserat på musposition
