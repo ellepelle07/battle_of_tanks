@@ -14,6 +14,7 @@ pygame.display.set_caption("Battle of Tanks - by Elias El Shobaki - Copyright (C
 # Initiera menyn (bakgrundsbild)
 menu = Menu(screen)
 
+
 class GameStates(Enum):
     MENU = 1,
     SELECT_TANK = 2,

@@ -1,8 +1,8 @@
 [
     {
-        "name": "Spelare 1",
-        "tank": "Sherman M4A3E8",
-        "country": "USA"
+        "name": "Spelare 2",
+        "tank": "T-34",
+        "country": "Ryssland"
     },
     {
         "name": "Spelare 1",
@@ -18,6 +18,11 @@
         "name": "Spelare 2",
         "tank": "T-34",
         "country": "Ryssland"
+    },
+    {
+        "name": "Spelare 1",
+        "tank": "Sherman M4A3E8",
+        "country": "USA"
     },
     {
         "name": "Spelare 1",

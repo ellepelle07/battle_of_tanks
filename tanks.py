@@ -1,5 +1,6 @@
 import pygame
 import math
+from shared.constants import *
 
 class Tank(pygame.sprite.Sprite):
     def __init__(self, name, max_hp, damage, x, y, image_path, facing=1, max_fuel=100):
@@ -32,6 +33,8 @@ class Tank(pygame.sprite.Sprite):
             self.fuel -= self.fuel_consumption_per_move
             if self.fuel < 0:
                 self.fuel = 0
+            return True  # Rörelse lyckades
+        return False  # Ingen rörelse på grund av bränslebrist
 
     def aim(self, da):
         """Justera siktvinkeln inom giltiga intervall."""

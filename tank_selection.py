@@ -13,6 +13,7 @@ TANK_HEIGHT = 200
 
 class TankSelection:
     def __init__(self, screen):
+        self.choose_your_fighter_sound = pygame.mixer.Sound("assets/sound/choose_your_fighter_sound.wav")
         self.screen = screen
         self.screen_width, self.screen_height = screen.get_size()
 
@@ -61,6 +62,8 @@ class TankSelection:
         self.tank2_title_usa = gui.Text("Sherman M4A3E8", None, 30, WHITE, left_center_x - 50, bottom_y + TANK_HEIGHT // 2 + 10)
         self.tank1_title_soviet = gui.Text("T-90", None, 30, WHITE, right_center_x - 50, top_y + TANK_HEIGHT // 2 + 10)
         self.tank2_title_soviet = gui.Text("T-34", None, 30, WHITE, right_center_x - 50, bottom_y + TANK_HEIGHT // 2 + 10)
+
+        self.choose_your_fighter_sound.play()
 
         self.selection = [None, None]
 

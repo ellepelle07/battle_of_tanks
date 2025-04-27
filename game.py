@@ -15,6 +15,7 @@ G                    = 300   # Gravitation i pixlar/sekund^2
 FUEL_BONUS_PER_ROUND = 10    # Bränslebonus varje hel runda
 TARGET_AREA_COLOR = (255, 0, 0)
 
+pygame.mixer.init()
 
 # Ladda bakgrundsbild
 background_image = pygame.image.load("assets/images/battlefield_background.jpg")
@@ -47,8 +48,15 @@ def draw_dashed_line(surface, color, start_pos, end_pos, dash_length=10):
 
 
 def start_battle(selected_tanks, screen):
+    battle_sound = pygame.mixer.Sound("assets/sound/battle_sound.ogg")
+    engine_sound = pygame.mixer.Sound("assets/sound/engine_sound.mp3")
+    battle_sound.play(loops=-1)
+
+    engine_playing = False
+
     clock = pygame.time.Clock()
     screen_width, screen_height = screen.get_size()
+
 
     def create_tank(name, x, bottom_y, facing):
         # Sätt HP, damage och bränsle beroende på tank
@@ -77,11 +85,12 @@ def start_battle(selected_tanks, screen):
         t.x = t.rect.centerx
         return t
 
-    left_tank  = create_tank(selected_tanks[0], 100,            GROUND_LEVEL, facing=1)
+    left_tank  = create_tank(selected_tanks[0], 100,           GROUND_LEVEL, facing=1)
     right_tank = create_tank(selected_tanks[1], screen_width-200, GROUND_LEVEL, facing=-1)
 
     current_phase: GamePhases = GamePhases.MOVE
     current_player    = 1
+
     projectile        = None
     explosions_active = []
 
@@ -118,21 +127,39 @@ def start_battle(selected_tanks, screen):
 
         keys = pygame.key.get_pressed()
 
-        # ======== MOVE & AIM ========
+        # Move
         if current_phase == GamePhases.MOVE:
             active = left_tank if current_player == 1 else right_tank
             if current_player == 1:
                 if keys[pygame.K_a]:
-                    active.move(-2)
+                    moved = active.move(-2)
+                    if moved and not engine_playing:
+                        engine_sound.play(loops=-1)  # Starta loopat ljud
+                        engine_playing = True
                 if keys[pygame.K_d]:
-                    active.move(2)
+                    moved = active.move(2)
+                    if moved and not engine_playing:
+                        engine_sound.play(loops=-1)
+                        engine_playing = True
+                if not (keys[pygame.K_a] or keys[pygame.K_d]) and engine_playing:
+                    engine_sound.stop()
+                    engine_playing = False
             else:
                 if keys[pygame.K_LEFT]:
-                    active.move(-2)
+                    moved = active.move(-2)
+                    if moved and not engine_playing:
+                        engine_sound.play(loops=-1)
+                        engine_playing = True
                 if keys[pygame.K_RIGHT]:
-                    active.move(2)
+                    moved = active.move(2)
+                    if moved and not engine_playing:
+                        engine_sound.play(loops=-1)
+                        engine_playing = True
+                if not (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]) and engine_playing:
+                    engine_sound.stop()
+                    engine_playing = False
 
-            # ======== AIM ========
+            # Aim
             active = left_tank if current_player == 1 else right_tank
             mx, my = pygame.mouse.get_pos()
             dx = mx - active.rect.centerx
@@ -165,13 +192,13 @@ def start_battle(selected_tanks, screen):
             if keys[pygame.K_SPACE] or mouse_down_btn:
                 current_phase = GamePhases.SHOOT
 
-        # ======== SHOOT ========
+        # Skott
         if current_phase == GamePhases.SHOOT:
             if projectile is None:
                 shooter = left_tank if current_player == 1 else right_tank
                 projectile = shooter.shoot()
 
-        # ======== PROJEKTIL-UPPDATE ========
+        # Projektiluppdatering
         if projectile:
             projectile.update(dt)
             target = right_tank if current_player == 1 else left_tank
@@ -187,11 +214,11 @@ def start_battle(selected_tanks, screen):
                 current_phase = GamePhases.MOVE
                 end_turn()
 
-        # ======== TEXT-ANVISNING ========
+        # Text - anvisning
         if current_phase == GamePhases.MOVE:
             info_text.set_text(f"Spelare {current_player}: Flytta, sikta och tryck SPACE för att skjuta")
 
-        # ======== RITA ALLT ========
+        # Rita allt
         left_tank.draw(screen)
         right_tank.draw(screen)
 
@@ -215,7 +242,7 @@ def start_battle(selected_tanks, screen):
         if left_tank.is_dead() or right_tank.is_dead():
             running = False
 
-    # ======== SLUTSCEN & SPARA RECENT WINNER ========
+    # Slutscen & spara 'recent winner'
     if left_tank.is_dead():
         winner_name, winner_tank = "Spelare 2", right_tank.name
     elif right_tank.is_dead():
@@ -234,3 +261,4 @@ def start_battle(selected_tanks, screen):
     msg.draw(screen)
     pygame.display.flip()
     pygame.time.wait(3000)
+    battle_sound.stop()

@@ -8,6 +8,7 @@ pygame.mixer.init()
 # Ladda ljudfilen för klick
 click_sound = pygame.mixer.Sound("assets/sound/click_sound.wav")
 
+
 class Menu:
     # Bakgrundsbilden för menyn
     war_image = None
@@ -22,6 +23,8 @@ class Menu:
         # Ladda och skala menyns bakgrundsbild
         self.war_image = pygame.image.load("assets/images/war_background.jpg")
         self.war_image = pygame.transform.scale(self.war_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+        self.menu_sound = pygame.mixer.Sound("assets/sound/menu_sound.mp3")
 
     # Privat metod som bara får användas i denna klass
     def __show_menu(self):
@@ -90,6 +93,7 @@ class Menu:
         clock = pygame.time.Clock()
         instruction_enabled = False
         self.__show_menu()
+        self.menu_sound.play(loops=-1)
         while True:
             if not instruction_enabled:
                 # Hantera knappmarkering baserat på musposition
@@ -109,6 +113,7 @@ class Menu:
                         if button.rect.collidepoint(event.pos):
                             click_sound.play()
                             if button.text == "Välj Stridsvagn":
+                                self.menu_sound.stop()
                                 return self.SELECT_TANK
                             elif button.text == "Senaste Vinnare":
                                 return self.SHOW_RECENT_WINNERS
