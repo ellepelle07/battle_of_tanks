@@ -2,7 +2,7 @@ import pygame
 from menu import Menu
 from enum import Enum
 import tank_selection
-import game
+from Battle import Battle
 import recent_winner
 from shared.constants import *
 
@@ -38,7 +38,8 @@ def start_game():
         elif current_state == GameStates.SELECT_TANK:
             selected_tanks = tank_selection.select_tank(screen)
             if selected_tanks[0] and selected_tanks[1]:
-                game.start_battle(selected_tanks, screen)
+                new_game = Battle(screen, selected_tanks)
+                new_game.start()
                 current_state = GameStates.MENU
 
         elif current_state == GameStates.RECENT_WINNERS:
