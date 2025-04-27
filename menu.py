@@ -18,6 +18,11 @@ class Menu:
     war_image = None
     screen_width = None
 
+    # Konstanter
+    SELECT_TANK = 1
+    SHOW_RECENT_WINNERS = 2
+    QUIT = 3
+
     def __init__(self, screen, screen_width, screen_height):
         self.screen = screen
         # Ladda och skala menyns bakgrundsbild
@@ -104,16 +109,16 @@ class Menu:
             # Hantera tangenttryck
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return "quit"
+                    return self.QUIT
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     for button in self.buttons:
                         if button.rect.collidepoint(event.pos):
                             click_sound.play()
                             if button.text == "Välj Stridsvagn":
-                                return "select_tank"
+                                return self.SELECT_TANK
                             elif button.text == "Senaste Vinnare":
-                                return "show_recent_winner"
+                                return self.SHOW_RECENT_WINNERS
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_h:
