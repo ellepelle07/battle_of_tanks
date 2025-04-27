@@ -31,7 +31,7 @@ class GameStates(Enum):
 
 def start_game():
     running = True
-    current_state = GameStates.MENU
+    current_state: GameStates = GameStates.MENU
 
     while running:
         # Tillstånd
