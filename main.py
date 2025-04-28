@@ -1,7 +1,7 @@
 import pygame
 from menu import Menu
 from enum import Enum
-import tank_selection
+from tank_selection import TankSelection
 from Battle import Battle
 import recent_winner
 from shared.constants import *
@@ -36,7 +36,8 @@ def start_game():
                 running = False
 
         elif current_state == GameStates.SELECT_TANK:
-            selected_tanks = tank_selection.select_tank(screen)
+            ts = TankSelection(screen)
+            selected_tanks = ts.run()
             if selected_tanks[0] and selected_tanks[1]:
                 new_game = Battle(screen, selected_tanks)
                 new_game.start()

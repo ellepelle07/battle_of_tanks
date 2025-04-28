@@ -154,7 +154,3 @@ class TankSelection:
                 running = False
             clock.tick(60)
         return self.selection
-
-def select_tank(screen):
-    ts = TankSelection(screen)
-    return ts.run()
