@@ -97,7 +97,7 @@ class Projectile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(x, y))
 
     def update(self, dt):
-        g = 300  # pixels/s^2
+        g = 300  # pixels/s^2      # GRAVIATION
         self.x += self.vx * dt
         self.y += self.vy * dt + 0.5 * g * dt * dt
         self.vy += g * dt

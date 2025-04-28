@@ -13,7 +13,7 @@ from random import randint
 # Inställningar
 AIM_LINE_LENGTH = 320
 GROUND_LEVEL = SCREEN_HEIGHT - 90
-GRAVITY = 300   # Gravitation i pixlar/sekund^2
+#########GRAVITY = 6000   # Gravitation i pixlar/sekund^2
 FUEL_BONUS_PER_ROUND = 10    # Bränslebonus varje hel runda
 TARGET_AREA_COLOR = (255, 0, 0)
 
@@ -72,13 +72,13 @@ class Battle:
         # Sätt HP, damage och bränsle beroende på tank
         if name in ("M1 Abrams", "T-90"):
             hp   = 210
-            dmg  = 25
-            fuel = 1250
+            dmg  = 500
+            fuel = 400
             img  = M1_ABRAMS_IMG if name == "M1 Abrams" else T90_IMG
         else:
             hp   = 155
-            dmg  = 50
-            fuel = 1050
+            dmg  = 500
+            fuel = 200
             img  = SHERMAN_IMG if name.startswith("Sherman") else T34_IMG
 
         # Skapa tank och ge den max_fuel
@@ -220,11 +220,11 @@ class Battle:
         # Slutscen & spara 'recent winner'
         winner_name = "Spelare " + str(self.current_player)
         winner_tank = self.right_tank.name if self.left_tank.is_dead() else self.left_tank.name
-        country = "USA" if self.left_tank.is_dead() else "Ryssland"
+        country = "USA" if self.right_tank.is_dead() else "Ryssland"
         recent_winner.save_recent_winner(winner_name, winner_tank, country)
 
         # Visa vinnarmeddelande
-        msg = Text(f"{winner_name} vann!", None, 60, BLACK, self.screen_width//2-150, self.screen_height//2-30)
+        msg = Text(f"{winner_tank} / {winner_name} vann!", None, 60, BLACK, 500, self.screen_height//2-30)
         self.screen.fill(WHITE)
         msg.draw(self.screen)
         pygame.display.flip()

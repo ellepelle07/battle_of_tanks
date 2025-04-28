@@ -6,6 +6,8 @@ from Battle import Battle
 import recent_winner
 from shared.constants import *
 
+# self.rect.x = max(0, min(self.rect.x + x_dist, 800 - 80)
+
 pygame.init()
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -16,16 +18,22 @@ menu = Menu(screen)
 
 
 class GameStates(Enum):
+    """De olika tillstånden som spelet kan befinna sig i.
+    Varje tillstånd har ett unikt värde som identifierar den aktuella fasen av spelet."""
+
     MENU = 1,
     SELECT_TANK = 2,
     RECENT_WINNERS = 3
 
 def start_game():
+    """Startar spelet och hanterar spelets huvudloop samt de olika tillstånden.
+    Spelet initieras i menytillståndet och fortsätter sedan baserat på användarens interaktioner. """
+
     running = True
     current_state: GameStates = GameStates.MENU
 
     while running:
-        # Tillstånd
+        # Hanterar de olika tillstånden
         if current_state == GameStates.MENU:
             menu_action = menu.get_action()
             if menu_action == menu.SELECT_TANK:
@@ -48,6 +56,7 @@ def start_game():
             current_state = GameStates.MENU
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     start_game()

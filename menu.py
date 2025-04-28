@@ -65,6 +65,7 @@ class Menu:
         gui.Text("CREDIT: Elias El Shobaki", None, 30, BLACK, SCREEN_WIDTH - 400, 320).draw(self.screen)
         gui.Text("Programmering 1", None, 30, BLACK, SCREEN_WIDTH - 400, 360).draw(self.screen)
         gui.Text("2025", None, 30, BLACK, SCREEN_WIDTH - 400, 390).draw(self.screen)
+        gui.Text("Betyg:  A?", None, 30,BLACK, SCREEN_WIDTH - 400, 430 ).draw(self.screen)
 
         instructions_text = [
             gui.Text("Om spelet:", "assets/fonts/gomarice_kamone_6.ttf", 40, BLACK, 20, 20),
