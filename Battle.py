@@ -208,8 +208,8 @@ class Battle:
 
             # Runda & bränsle‐info
             Text(f"Runda: {self.round_counter}",  None, 30, BLACK, SCREEN_WIDTH-150, 20).draw(self.screen)
-            Text(f"Bränsle P1: {int(self.left_tank.fuel)}",  None, 24, BLACK, 20, 50).draw(self.screen)
-            Text(f"Bränsle P2: {int(self.right_tank.fuel)}", None, 24, BLACK, SCREEN_WIDTH-160, 50).draw(self.screen)
+            Text(f"Bränsle USA: {int(self.left_tank.fuel)}",  None, 24, BLACK, 20, 50).draw(self.screen)
+            Text(f"Bränsle Ryssland: {int(self.right_tank.fuel)}", None, 24, BLACK, SCREEN_WIDTH-190, 50).draw(self.screen)
 
             self.info_text.draw(self.screen)
             pygame.display.flip()
