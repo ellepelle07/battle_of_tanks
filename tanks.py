@@ -1,9 +1,11 @@
 import pygame
 import math
 
+# Klassen Tank ärver från pygame.sprite.Sprite
+# vilket ger den tillgång till Pygame:s sprite-system
 class Tank(pygame.sprite.Sprite):
     def __init__(self, name, max_hp, damage, x, y, image_path, facing=1, max_fuel=100):
-        super().__init__()
+        super().__init__()  # Anropar basklassens __init__ för att initiera Sprite-funktionalitet
         self.name = name
         self.max_hp = max_hp
         self.hp = max_hp
