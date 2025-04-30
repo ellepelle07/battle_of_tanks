@@ -128,7 +128,7 @@ class Menu:
                         instruction_enabled = True
                         self.__show_instructions()
 
-                    if event.key == pygame.K_ESCAPE:
+                    if event.key == pygame.K_ESCAPE and instruction_enabled:
                         instruction_enabled = False
                         self.__show_menu()
 
