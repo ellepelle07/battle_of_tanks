@@ -207,7 +207,7 @@ class Battle:
                     self.explosions_active.remove(ex)
 
             # Runda & bränsle‐info
-            Text(f"Runda: {self.round_counter}",  None, 30, BLACK, SCREEN_WIDTH-150, 20).draw(self.screen)
+            Text(f"Runda: {self.round_counter}",  None, 40, BLACK, SCREEN_WIDTH // 2 - 60, 20).draw(self.screen)
             Text(f"Bränsle USA: {int(self.left_tank.fuel)}",  None, 24, BLACK, 20, 50).draw(self.screen)
             Text(f"Bränsle Ryssland: {int(self.right_tank.fuel)}", None, 24, BLACK, SCREEN_WIDTH-190, 50).draw(self.screen)
 
