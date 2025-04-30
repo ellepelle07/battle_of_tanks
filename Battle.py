@@ -14,7 +14,7 @@ from random import randint
 AIM_LINE_LENGTH = 320
 GROUND_LEVEL = SCREEN_HEIGHT - 90
 #########GRAVITY = 6000   # Gravitation i pixlar/sekund^2
-FUEL_BONUS_PER_ROUND = 10    # Bränslebonus varje hel runda
+FUEL_BONUS_PER_ROUND = 15    # Bränslebonus varje hel runda
 TARGET_AREA_COLOR = (255, 0, 0)
 
 pygame.mixer.init()
@@ -202,7 +202,7 @@ class Battle:
 
             for ex in self.explosions_active:
                 ex.update(dt)
-                ex.draw(self.screen)
+                ex.draw(self.screen)  # Anropar dynamiskt Projectile-klassens draw-metod
                 if ex.finished:
                     self.explosions_active.remove(ex)
 

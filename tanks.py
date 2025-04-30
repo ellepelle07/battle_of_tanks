@@ -1,7 +1,7 @@
 import pygame
 import math
 
-# Klassen Tank ärver från pygame.sprite.Sprite
+# Klassen Tank ärver från basklassen pygame.sprite.Sprite
 # vilket ger den tillgång till Pygame:s sprite-system
 class Tank(pygame.sprite.Sprite):
     def __init__(self, name, max_hp, damage, x, y, image_path, facing=1, max_fuel=100):
@@ -100,9 +100,11 @@ class Projectile(pygame.sprite.Sprite):
 
     def update(self, dt):
         g = 300  # pixels/s^2      # GRAVIATION
-        self.x += self.vx * dt
-        self.y += self.vy * dt + 0.5 * g * dt * dt
-        self.vy += g * dt
+        self.x += self.vx * dt                       # Horisontell förflyttning
+        self.y += self.vy * dt + 0.5 * g * dt * dt   # Kinematikformeln: Vertikal förflyttning med konstant acceleration
+        self.vy += g * dt                            # Gravitationspåverkan på den vertikala hastigheten
+
+        # Konvertera flyttal till heltal eftersom pygame.Rect kräver heltalskoordinater
         self.rect.center = (int(self.x), int(self.y))
 
     def draw(self, screen):

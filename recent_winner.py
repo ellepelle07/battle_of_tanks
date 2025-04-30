@@ -3,7 +3,7 @@ import pygame
 import gui
 from shared.constants import *
 
-# Initiera Pygame
+# Initiera Pygame              TA BORTTTTTT
 pygame.init()
 
 # Filväg för att lagra de senaste vinnarna
@@ -40,7 +40,7 @@ def get_recent_winners():
         with open(RECENT_WINNERS_FILE, 'r') as file:
             winners = json.load(file)
             return winners
-    except Exception:
+    except:
         return []
 
 def show_winner(screen):
@@ -59,7 +59,7 @@ def show_winner(screen):
         winner_texts.append(gui.Text(text, None, 30, BLACK, 100, y_offset))
         y_offset += 40
 
-    back_text = gui.Text("Tryck ESC för att gå tillbaka", None, 25, BLACK, 100, y_offset + 30)
+    back_text = gui.Text("Tryck 'ESC' för att gå tillbaka", None, 25, BLACK, 100, y_offset + 30)
 
     running = True
     while running:
