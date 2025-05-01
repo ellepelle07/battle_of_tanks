@@ -32,7 +32,7 @@ class Menu:
         # Instruktionstexter
         instructions_text = [
             gui.Text("Instruktioner:", None, 30, WHITE, 20, 520),
-            gui.Text("1. Använd piltangenter för att röra dig", None, 25, WHITE, 20, 550),
+            gui.Text("1. Använd piltangenter för att styra", None, 25, WHITE, 20, 550),
             gui.Text("2. Tryck på SPACE för att skjuta", None, 25, WHITE, 20, 590),
             gui.Text("Tryck 'H' för mer information om spelet", None, 25, WHITE, 20, 640),
         ]
