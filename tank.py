@@ -1,10 +1,12 @@
 import pygame
 import math
+from projectile import Projectile
+
 
 # Klassen Tank ärver från basklassen pygame.sprite.Sprite
 # vilket ger den tillgång till Pygame:s sprite-system
 class Tank(pygame.sprite.Sprite):
-    def __init__(self, name, max_hp, damage, x, y, image_path, facing=1, max_fuel=100):
+    def __init__(self, name, max_hp, damage, x, y, image_path, screen_width, facing=1, max_fuel=100):
         super().__init__()  # Anropar basklassens __init__ för att initiera Sprite-funktionalitet
         self.name = name
         self.max_hp = max_hp
@@ -18,6 +20,7 @@ class Tank(pygame.sprite.Sprite):
         self.image = pygame.image.load(image_path)
         self.image = pygame.transform.scale(self.image, (120, 70))
         self.image = pygame.transform.flip(self.image, facing == 1, False)
+        self.screen_width = screen_width
         self.rect = self.image.get_rect(center=(x, y))
         # Projektilhastighet
         self.projectile_speed = 550
@@ -29,11 +32,12 @@ class Tank(pygame.sprite.Sprite):
     def move(self, dx):
         """Flytta endast om bränsle finns kvar."""
         if self.fuel >= self.fuel_consumption_per_move:
-            self.x += dx
-            self.rect.centerx = self.x
             self.fuel -= self.fuel_consumption_per_move
             if self.fuel < 0:
                 self.fuel = 0
+            if 0 <= (self.x + dx) <= self.screen_width:
+                self.x += dx
+                self.rect.centerx = self.x
             return True  # Rörelse lyckades
         return False  # Ingen rörelse på grund av bränslebrist
 
@@ -84,32 +88,3 @@ class Tank(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (50, 50, 50), (x, y, bar_width, bar_height))
         fill_width = int((self.fuel / self.max_fuel) * bar_width)
         pygame.draw.rect(screen, (255, 165, 0), (x, y, fill_width, bar_height))
-
-
-class Projectile(pygame.sprite.Sprite):
-    def __init__(self, x, y, vx, vy):
-        super().__init__()
-        self.x = x
-        self.y = y
-        self.vx = vx
-        self.vy = vy
-        # Ladda och skala projektilbilden
-        self.image = pygame.image.load("assets/sprites/bullet.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (20, 20))
-        self.rect = self.image.get_rect(center=(x, y))
-
-    def update(self, dt):
-        g = 300  # pixels/s^2      # GRAVIATION
-        self.x += self.vx * dt                       # Horisontell förflyttning
-        self.y += self.vy * dt + 0.5 * g * dt * dt   # Kinematikformeln: Vertikal förflyttning med konstant acceleration
-        self.vy += g * dt                            # Gravitationspåverkan på den vertikala hastigheten
-
-        # Konvertera flyttal till heltal eftersom pygame.Rect kräver heltalskoordinater
-        self.rect.center = (int(self.x), int(self.y))
-
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
-    def is_offscreen(self, screen_width, screen_height):
-        return (self.x < 0 or self.x > screen_width
-                or self.y < 0 or self.y > screen_height)

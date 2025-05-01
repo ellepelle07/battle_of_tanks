@@ -2,11 +2,10 @@ import pygame
 from menu import Menu
 from enum import Enum
 from tank_selection import TankSelection
-from Battle import Battle
+from battle import Battle
 import recent_winner
 from shared.constants import *
 
-# self.rect.x = max(0, min(self.rect.x + x_dist, 800 - 80)
 
 pygame.init()
 

@@ -2,12 +2,12 @@ import pygame
 import sys
 import math
 from gui import Text
-import tanks
+from tank import Tank
 import recent_winner
 import explosions
 from enum import Enum
 from shared.constants import *
-from IcePuddle import IcePuddle
+from obstacle import Obstacle
 from random import randint
 
 # Inställningar
@@ -53,10 +53,12 @@ class Battle:
         self.screen = screen
         self.battle_sound = pygame.mixer.Sound("assets/sound/battle_sound.ogg")
         self.engine_sound = pygame.mixer.Sound("assets/sound/engine_sound.mp3")
+        puddle = pygame.image.load("assets/sprites/ice_frames.png")
+        self.puddle_img = pygame.transform.scale(puddle, (600, 150))  # Hårdkodad storlek
         self.engine_playing = False
         self.clock = pygame.time.Clock()
         self.screen_width, self.screen_height = screen.get_size()
-        self.puddle = IcePuddle((self.screen_width // 2, GROUND_LEVEL))
+        self.puddle = Obstacle(self.puddle_img,(self.screen_width // 2, GROUND_LEVEL))
         self.current_phase: GamePhases = GamePhases.MOVE
         self.current_player = randint(1, 2)  # Slumpa vilken spelar som börjar
         self.projectile = None
@@ -81,14 +83,16 @@ class Battle:
             img  = SHERMAN_IMG if name.startswith("Sherman") else T34_IMG
 
         # Skapa tank och ge den max_fuel
-        t = tanks.Tank(
+        t = Tank(
             name=name,
             max_hp=hp,
             damage=dmg,
             x=x, y=bottom_y,
             image_path=img,
+            screen_width=self.screen_width,
             facing=facing,
             max_fuel=fuel
+
         )
         t.rect.bottom = bottom_y
         t.x = t.rect.centerx
@@ -184,7 +188,7 @@ class Battle:
                     self.projectile = None
                     self.current_phase = GamePhases.MOVE
                     self.__end_turn()
-                elif self.projectile.is_offscreen(self.screen_width, self.screen_height):
+                elif self.projectile.is_off_screen(self.screen_width, self.screen_height):
                     self.projectile = None
                     self.current_phase = GamePhases.MOVE
                     self.__end_turn()
