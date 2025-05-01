@@ -17,7 +17,6 @@ GROUND_LEVEL = SCREEN_HEIGHT - 90
 FUEL_BONUS_PER_ROUND = 15    # Bränslebonus varje hel runda
 TARGET_AREA_COLOR = (255, 0, 0)
 
-pygame.mixer.init()
 
 # Ladda bakgrundsbild
 background_image = pygame.image.load("assets/images/battlefield_background.jpg")
@@ -128,6 +127,7 @@ class Battle:
 
             # MOVE-fasen
             if self.current_phase == GamePhases.MOVE:
+                self.info_text.set_text(f"Spelare {self.current_player}: Flytta, sikta och tryck SPACE för att skjuta")
                 moved = False
                 if keys[pygame.K_a] or keys[pygame.K_LEFT]:
                     moved = active_tank.move(-1)
@@ -189,10 +189,6 @@ class Battle:
                     self.current_phase = GamePhases.MOVE
                     self.__end_turn()
 
-            # Text - anvisning
-            if self.current_phase == GamePhases.MOVE:
-                self.info_text.set_text(f"Spelare {self.current_player}: Flytta, sikta och tryck SPACE för att skjuta")
-
             # Rita allt
             self.left_tank.draw(self.screen)
             self.right_tank.draw(self.screen)
@@ -218,9 +214,10 @@ class Battle:
                 running = False
 
         # Slutscen & spara 'recent winner'
-        winner_name = "Spelare " + str(self.current_player)
-        winner_tank = self.right_tank.name if self.left_tank.is_dead() else self.left_tank.name
-        country = "USA" if self.right_tank.is_dead() else "Ryssland"
+        winner_player = 1 if self.current_player == 2 else 2
+        winner_name = "Spelare " + str(winner_player)
+        winner_tank = self.left_tank.name if winner_player == 1 else self.right_tank.name
+        country = "USA" if winner_player == 1 else "Ryssland"
         recent_winner.save_recent_winner(winner_name, winner_tank, country)
 
         # Visa vinnarmeddelande

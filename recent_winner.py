@@ -3,9 +3,6 @@ import pygame
 import gui
 from shared.constants import *
 
-# Initiera Pygame              TA BORTTTTTT
-pygame.init()
-
 # Filväg för att lagra de senaste vinnarna
 RECENT_WINNERS_FILE = 'recent_winners.json'
 
@@ -26,7 +23,7 @@ def save_recent_winner(winner_name, tank, country):
         'tank': tank,
         'country': country
     })
-    recent_winners = recent_winners[-6:][::-1]
+    recent_winners = recent_winners[-6:]
 
     with open(RECENT_WINNERS_FILE, 'w') as file:
         json.dump(recent_winners, file, indent=4)
@@ -50,7 +47,7 @@ def show_winner(screen):
     """
     title_text = gui.Text("Senaste Vinnare", None, 70, BLACK, 250, 50)
 
-    winners = get_recent_winners()
+    winners = get_recent_winners()[::-1]  # Vänd/reversa listan innan den visas på skärmen
     y_offset = 150
     winner_texts = []
 

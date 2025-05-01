@@ -2,17 +2,7 @@ import pygame
 import gui
 from shared.constants import *
 
-# Initiera Pygame:s mixer för ljudhantering
-pygame.mixer.init()
-
-# Ladda ljudfilen för klick
-click_sound = pygame.mixer.Sound("assets/sound/click_sound.wav")
-
-
 class Menu:
-    # Bakgrundsbilden för menyn
-    war_image = None
-
     # Konstanter
     SELECT_TANK = 1
     SHOW_RECENT_WINNERS = 2
@@ -24,7 +14,10 @@ class Menu:
         self.war_image = pygame.image.load("assets/images/war_background.jpg")
         self.war_image = pygame.transform.scale(self.war_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
+        # Ladda ljudfiler
         self.menu_sound = pygame.mixer.Sound("assets/sound/menu_sound.mp3")
+        self.click_sound = pygame.mixer.Sound("assets/sound/click_sound.wav")
+
         # Skapa en dedikerad kanal för menyljudet, så att vi inte spelar upp flera instanser samtidigt
         self.menu_channel = pygame.mixer.Channel(1)
 
@@ -116,7 +109,7 @@ class Menu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     for button in self.buttons:
                         if button.rect.collidepoint(event.pos):
-                            click_sound.play()
+                            self.click_sound.play()
                             if button.text == "Välj Stridsvagn":
                                 self.menu_channel.fadeout(2000)
                                 return self.SELECT_TANK

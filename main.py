@@ -10,6 +10,9 @@ from shared.constants import *
 
 pygame.init()
 
+# Initiera Pygame:s mixer för ljudhantering
+pygame.mixer.init()
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Battle of Tanks - by Elias El Shobaki - Copyright (C) 2025")
 
