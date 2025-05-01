@@ -1,3 +1,5 @@
+import time
+
 import pygame
 import sys
 import math
@@ -13,7 +15,6 @@ from random import randint
 # Inställningar
 AIM_LINE_LENGTH = 320
 GROUND_LEVEL = SCREEN_HEIGHT - 90
-#########GRAVITY = 6000   # Gravitation i pixlar/sekund^2
 FUEL_BONUS_PER_ROUND = 15    # Bränslebonus varje hel runda
 TARGET_AREA_COLOR = (255, 0, 0)
 
@@ -32,7 +33,8 @@ class GamePhases(Enum):
     AIM = 2,
     SHOOT = 3
 
-def draw_dashed_line(surface, color, start_pos, end_pos, dash_length=10):
+
+def draw_dashed_line(screen, color, start_pos, end_pos, dash_length=10):
     x1, y1 = start_pos
     x2, y2 = end_pos
     dx = x2 - x1
@@ -45,7 +47,7 @@ def draw_dashed_line(surface, color, start_pos, end_pos, dash_length=10):
         start_y = y1 + (dy * i / dash_count)
         end_x = x1 + (dx * (i + 0.5) / dash_count)
         end_y = y1 + (dy * (i + 0.5) / dash_count)
-        pygame.draw.line(surface, color, (start_x, start_y), (end_x, end_y), 3)
+        pygame.draw.line(screen, color, (start_x, start_y), (end_x, end_y), 3)
 
 
 class Battle:
@@ -68,6 +70,12 @@ class Battle:
         self.info_text = Text("", None, 30, BLACK, 50, 20)
         self.left_tank  = self.__create_tank(selected_tanks[0], 100, GROUND_LEVEL, facing=1)
         self.right_tank = self.__create_tank(selected_tanks[1], self.screen_width-200, GROUND_LEVEL, facing=-1)
+
+    def __explode_projectile(self):
+        self.explosions_active.append(explosions.Explosion(self.projectile.x, self.projectile.y))
+        self.projectile = None
+        self.current_phase = GamePhases.MOVE
+        self.__end_turn()
 
     def __create_tank(self, name, x, bottom_y, facing):
         # Sätt HP, damage och bränsle beroende på tank
@@ -168,7 +176,7 @@ class Battle:
                 sx, sy = active_tank.rect.center
                 ex = sx + AIM_LINE_LENGTH * math.cos(rad)
                 ey = sy - AIM_LINE_LENGTH * math.sin(rad)
-                draw_dashed_line(self.screen, WHITE, (sx, sy), (ex, ey), 6)
+                draw_dashed_line(self.screen, WHITE, (sx, sy), (ex, ey), 10)
 
                 if keys[pygame.K_SPACE] or mouse_down_btn:
                     self.current_phase = GamePhases.SHOOT
@@ -184,14 +192,11 @@ class Battle:
                 target = self.right_tank if self.current_player == 1 else self.left_tank
                 if target.rect.collidepoint(self.projectile.x, self.projectile.y):
                     target.take_damage(active_tank.damage)
-                    self.explosions_active.append(explosions.Explosion(self.projectile.x, self.projectile.y))
-                    self.projectile = None
-                    self.current_phase = GamePhases.MOVE
-                    self.__end_turn()
+                    self.__explode_projectile()
                 elif self.projectile.is_off_screen(self.screen_width, self.screen_height):
-                    self.projectile = None
-                    self.current_phase = GamePhases.MOVE
-                    self.__end_turn()
+                    self.__explode_projectile()
+                elif self.projectile.y > GROUND_LEVEL:
+                    self.__explode_projectile()
 
             # Rita allt
             self.left_tank.draw(self.screen)
@@ -215,6 +220,7 @@ class Battle:
             pygame.display.flip()
 
             if self.left_tank.is_dead() or self.right_tank.is_dead():
+                time.sleep(0.6)
                 running = False
 
         # Slutscen & spara 'recent winner'

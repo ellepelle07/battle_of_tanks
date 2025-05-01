@@ -27,4 +27,3 @@ class Projectile(pygame.sprite.Sprite):
     def is_off_screen(self, screen_width, screen_height):
         return (self.x < 0 or self.x > screen_width
                 or self.y < 0 or self.y > screen_height)
-

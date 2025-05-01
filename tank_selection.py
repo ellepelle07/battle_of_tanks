@@ -65,7 +65,7 @@ class TankSelection:
 
         self.choose_your_fighter_sound.play()
 
-        self.selection = [None, None]
+        self.selection = ["", ""]
 
     def draw(self):
         # Rita bakgrunder: vänster halva blå, höger halva röd
