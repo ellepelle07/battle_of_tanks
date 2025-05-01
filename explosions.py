@@ -8,6 +8,7 @@ explosion_sound: pygame.mixer.Sound
 def load_explosion_resources():
     global explosion_images, explosion_sound, resources_loaded
     if not resources_loaded:
+        # convert_alpha() - Ladda bilderna, konvertera dem för snabbare rendering och behåll transparens (alfa-kanal)
         explosion_images = [
             pygame.image.load("assets/sprites/explosion_1.png").convert_alpha(),
             pygame.image.load("assets/sprites/explosion_2.png").convert_alpha(),
@@ -44,5 +45,4 @@ class Explosion:
 
 
 def play_explosion_sound():
-    if explosion_sound:
-        explosion_sound.play()
+    explosion_sound.play()
