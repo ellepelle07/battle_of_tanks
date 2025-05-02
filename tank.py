@@ -67,18 +67,27 @@ class Tank(pygame.sprite.Sprite):
             return True  # Rörelse lyckades
         return False  # Ingen rörelse på grund av bränslebrist
 
-#TAAAAAAAAAA BOOOOOOOOOOOOOOOOOOORT >>>>>>>>>>>>>>>>>>>>>>>>
-    def aim(self, da):
+    def aim(self, target_x, target_y):
         """
-        Justerar tankens siktvinkel inom giltiga gränser.
+        Siktar på en punkt (t.ex. muspekaren), klipper vinkeln efter facing.
 
-        :param da: Vinkeländring i grader.
+        :param target_x: X-koordinat dit tanken ska sikta (t.ex. musens x).
+        :param target_y: Y-koordinat dit tanken ska sikta (t.ex. musens y).
         """
-        self.angle += da
-        if self.facing == 1:   # angle = 45
-            self.angle = max(0, min(90, self.angle))
-        else:                  # angle = 135
-            self.angle = max(90, min(180, self.angle))
+        # Beräkna vektor från tankens centrum till målet
+        dx = target_x - self.rect.centerx
+        dy = self.rect.centery - target_y
+
+        # Räkna ut rå vinkel i grader
+        raw = math.degrees(math.atan2(dy, dx))
+        if raw < 0:
+            raw += 360
+
+        # Klipp beroende på vilken sida tanken vänder
+        if self.facing == 1:
+            self.angle = max(0, min(90, int(raw)))
+        else:
+            self.angle = max(90, min(180, int(raw)))
 
     def shoot(self):
         """

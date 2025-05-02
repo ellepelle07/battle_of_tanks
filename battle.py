@@ -205,22 +205,9 @@ class Battle:
                         self.engine_sound.stop()
                         self.engine_playing = False
 
-                # Aim  >>>>>>KOLLA OM MAN KAN INTEGRERA DENNA MED aim-metoden i tank.py<<<<<<<<<
-                # Exempel: i Battle.start() hantera tryck på ↑/↓
-                # if keys[pygame.K_UP]:
-                #     active_tank.aim(+1)
-                # if keys[pygame.K_DOWN]:
-                #     active_tank.aim(-1)
-
+                # Sikta med mus
                 mx, my = pygame.mouse.get_pos()
-                dx = mx - active_tank.rect.centerx
-                dy = active_tank.rect.centery - my
-                raw = math.degrees(math.atan2(dy, dx))
-                if raw < 0: raw += 360
-                if self.current_player == 1:
-                    active_tank.angle = max(0, min(90, int(raw)))
-                else:
-                    active_tank.angle = max(90, min(180, int(raw)))
+                active_tank.aim(mx, my)
 
                 # Rita siktlinje
                 rad = math.radians(active_tank.angle)
