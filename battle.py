@@ -75,16 +75,17 @@ class Battle:
         :param screen:          pygame.Surface som används för rendering.
         :param selected_tanks:  Lista med två strängar från tank_selection.py, valda tanknamn för spelare 1 och 2.
         """
-
         self.screen = screen
         self.battle_sound = pygame.mixer.Sound("assets/sound/battle_sound.ogg")
         self.engine_sound = pygame.mixer.Sound("assets/sound/engine_sound.mp3")
         puddle = pygame.image.load("assets/sprites/ice_frames.png")
+
         self.puddle_img = pygame.transform.scale(puddle, (600, 150))  # Hårdkodad storlek
         self.engine_playing = False
         self.clock = pygame.time.Clock()
         self.screen_width, self.screen_height = screen.get_size()
         self.puddle = Obstacle(self.puddle_img,(self.screen_width // 2, GROUND_LEVEL))
+
         self.current_phase: GamePhases = GamePhases.MOVE
         self.current_player = randint(1, 2)  # Slumpa vilken spelar som börjar
         self.projectile = None
@@ -94,6 +95,9 @@ class Battle:
         self.info_text = Text("", None, 30, BLACK, 50, 20)
         self.left_tank  = self.__create_tank(selected_tanks[0], 100, GROUND_LEVEL, facing=1)
         self.right_tank = self.__create_tank(selected_tanks[1], self.screen_width-200, GROUND_LEVEL, facing=-1)
+
+        # Starta spelet redan vid initieringen
+        self.__start()
 
     def __explode_projectile(self):
         """
@@ -159,7 +163,7 @@ class Battle:
             self.left_tank.fuel  = min(self.left_tank.max_fuel,  self.left_tank.fuel  + FUEL_BONUS_PER_ROUND)
             self.right_tank.fuel = min(self.right_tank.max_fuel, self.right_tank.fuel + FUEL_BONUS_PER_ROUND)
 
-    def start(self):
+    def __start(self):
         """
         Startar spelets huvudloop
         """
@@ -171,6 +175,7 @@ class Battle:
             self.screen.blit(background_image, (0, 0))
             self.puddle.draw(self.screen)
 
+            # Ett flyttal som säger hur många sekunder som förflutit sedan förra uppdateringen.
             dt = self.clock.tick(60) / 1000.0
 
             for event in pygame.event.get():
@@ -270,7 +275,7 @@ class Battle:
 
         # Visa vinnarmeddelande
         msg = Text(f"{winner_tank} / {winner_name} vann!", None, 60, BLACK, 500, self.screen_height//2-30)
-        self.screen.fill(WHITE)
+        self.screen.fill(BLUE) if winner_player == 1 else self.screen.fill(RED)
         msg.draw(self.screen)
         pygame.display.flip()
         self.battle_sound.fadeout(4000)

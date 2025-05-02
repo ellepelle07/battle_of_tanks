@@ -2,9 +2,7 @@ import pygame
 import gui
 from shared.constants import *
 
-# Lokala färger
-RED = (255, 0, 0)
-BLUE = (30, 20, 135)
+# Lokal färg
 HOVER_BORDER = (255, 215, 0)  # Gyllene kant vid hover
 
 # Tankstorlekar

@@ -2,6 +2,10 @@ import pygame
 import math
 from projectile import Projectile
 
+# Lokala färger
+ORANGE = (255, 165, 0)
+GRAY_BAR = (50, 50, 50)
+GREEN_HEALTH = (0, 255, 0)
 
 # Klassen Tank ärver från basklassen pygame.sprite.Sprite
 # vilket ger den tillgång till Pygame:s sprite-system
@@ -13,15 +17,15 @@ class Tank(pygame.sprite.Sprite):
         """
         Initierar en Tank-instans med alla dess attribut och resurser.
 
-        :param name: Sträng som identifierar tanktypen.
-        :param max_hp: Maximal hälsa (HP) för tanken.
-        :param damage: Skadevärdet projektilen kommer att åstadkomma.
-        :param x: Startpositionens x-koordinat (mitten).
-        :param y: Startpositionens y-koordinat (mitten).
-        :param image_path: Sökväg till bildfil för tanken.
+        :param name:         Sträng som identifierar tanktypen.
+        :param max_hp:       Maximal hälsa (HP) för tanken.
+        :param damage:       Skadevärdet projektilen kommer att åstadkomma.
+        :param x:            Startpositionens x-koordinat (mitten).
+        :param y:            Startpositionens y-koordinat (mitten).
+        :param image_path:   Sökväg till bildfil för tanken.
         :param screen_width: Skärmens bredd används för gränskoll.
-        :param facing: Riktning tanken vänder (1=höger, -1=vänster).
-        :param max_fuel: Det maximala bränslet en tank kan ha.
+        :param facing:       Riktning tanken vänder (1=höger, -1=vänster).
+        :param max_fuel:     Det maximala bränslet en tank kan ha.
         """
         super().__init__()  # Anropar basklassens __init__ för att initiera Sprite-funktionalitet
         self.name = name
@@ -40,7 +44,8 @@ class Tank(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.image, facing == 1, False)
 
         self.screen_width = screen_width
-        # Rektangel för kollisions- och positionshantering
+        # Skapar en pygame.Rect (rektangel) med samma bredd och höjd som bilden
+        # centrerad vid (x, y) för att hantera både positionering och kollisioner
         self.rect = self.image.get_rect(center=(x, y))
 
         # Projektilhastighet
@@ -75,7 +80,7 @@ class Tank(pygame.sprite.Sprite):
         :param target_y: Y-koordinat dit tanken ska sikta (t.ex. musens y).
         """
         # Beräkna vektor från tankens centrum till målet
-        dx = target_x - self.rect.centerx   # dx= avståndet från tankens mitt till målet
+        dx = target_x - self.rect.centerx   # dx = avståndet från tankens mitt till målet
         dy = self.rect.centery - target_y
 
         # Räkna ut rå vinkel i grader
@@ -112,7 +117,6 @@ class Tank(pygame.sprite.Sprite):
         if self.hp < 0:
             self.hp = 0
 
-## KAN MAN SKRIVA DETTA PÅ ETT ANNAT SÄTT??
     def is_dead(self):
         """
         Kontrollerar om tankens HP har gått ner till noll.
@@ -137,11 +141,11 @@ class Tank(pygame.sprite.Sprite):
         """
         bar_width = 100
         bar_height = 8
-        x = self.rect.x
+        x = self.rect.x  # positionen för rektangelns vänstra kant som omsluter tanken
         y = self.rect.y - 20
-        pygame.draw.rect(screen, (50, 50, 50), (x, y, bar_width, bar_height))
+        pygame.draw.rect(screen, GRAY_BAR, (x, y, bar_width, bar_height))
         fill_width = int((self.hp / self.max_hp) * bar_width)
-        pygame.draw.rect(screen, (0, 255, 0), (x, y, fill_width, bar_height))
+        pygame.draw.rect(screen, GREEN_HEALTH, (x, y, fill_width, bar_height))
 
     def draw_fuel_bar(self, screen):
         """
@@ -153,6 +157,6 @@ class Tank(pygame.sprite.Sprite):
         bar_height = 8
         x = self.rect.x
         y = self.rect.y - 10
-        pygame.draw.rect(screen, (50, 50, 50), (x, y, bar_width, bar_height))
+        pygame.draw.rect(screen, GRAY_BAR, (x, y, bar_width, bar_height))
         fill_width = int((self.fuel / self.max_fuel) * bar_width)
-        pygame.draw.rect(screen, (255, 165, 0), (x, y, fill_width, bar_height))
+        pygame.draw.rect(screen, ORANGE, (x, y, fill_width, bar_height))

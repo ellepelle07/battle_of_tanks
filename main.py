@@ -53,8 +53,7 @@ def start_game():
             ts = TankSelection(screen)
             selected_tanks = ts.run()
             if selected_tanks[0] and selected_tanks[1]:
-                new_game = Battle(screen, selected_tanks)
-                new_game.start()
+                Battle(screen, selected_tanks)
                 current_state = GameStates.MENU
 
         elif current_state == GameStates.RECENT_WINNERS:
