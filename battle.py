@@ -1,5 +1,4 @@
 import time
-
 import pygame
 import sys
 import math
@@ -14,7 +13,7 @@ from random import randint
 
 # Inställningar
 AIM_LINE_LENGTH = 320
-GROUND_LEVEL = SCREEN_HEIGHT - 90
+GROUND_LEVEL = SCREEN_HEIGHT - 92
 FUEL_BONUS_PER_ROUND = 15    # Bränslebonus varje hel runda
 TARGET_AREA_COLOR = (255, 0, 0)
 
@@ -29,12 +28,26 @@ M1_ABRAMS_IMG = "assets/sprites/M1_ABRAMS.png"
 SHERMAN_IMG =  "assets/sprites/SHERMAN.png"
 
 class GamePhases(Enum):
+    """
+    Enum som representerar de olika faserna i spelet:
+    """
+
     MOVE = 1,
     AIM = 2,
     SHOOT = 3
 
 
 def draw_dashed_line(screen, color, start_pos, end_pos, dash_length=10):
+    """
+    Ritar en streckad linje mellan två punkter på given skärm.
+
+    :param screen:      pygame.Surface där linjen ska ritas.
+    :param color:       Färg på linjen som en RGB-tuple, t.ex. (255, 0, 0).
+    :param start_pos:   Startkoordinat som tuple (x, y).
+    :param end_pos:     Slutkoordinat som tuple (x, y).
+    :param dash_length: Längd på varje streck i pixlar (standard=10).
+    """
+
     x1, y1 = start_pos
     x2, y2 = end_pos
     dx = x2 - x1
@@ -51,7 +64,18 @@ def draw_dashed_line(screen, color, start_pos, end_pos, dash_length=10):
 
 
 class Battle:
+    """
+    Hanterar hela spelomgången.
+    """
+
     def __init__(self, screen, selected_tanks):
+        """
+        Initierar Battle-objektet med resurser, ljud, hinder och spelparametrar.
+
+        :param screen:          pygame.Surface som används för rendering.
+        :param selected_tanks:  Lista med två strängar från tank_selection.py, valda tanknamn för spelare 1 och 2.
+        """
+
         self.screen = screen
         self.battle_sound = pygame.mixer.Sound("assets/sound/battle_sound.ogg")
         self.engine_sound = pygame.mixer.Sound("assets/sound/engine_sound.mp3")
@@ -72,12 +96,26 @@ class Battle:
         self.right_tank = self.__create_tank(selected_tanks[1], self.screen_width-200, GROUND_LEVEL, facing=-1)
 
     def __explode_projectile(self):
+        """
+        Lägger till en explosion på projektilens plats, tar bort projektilen,
+        byter till nästa spelare och återgår till flyttfasen.
+        """
         self.explosions_active.append(explosions.Explosion(self.projectile.x, self.projectile.y))
         self.projectile = None
         self.current_phase = GamePhases.MOVE
         self.__end_turn()
 
     def __create_tank(self, name, x, bottom_y, facing):
+        """
+        Skapar och returnerar en Tank-instans baserat på namnet.
+
+        :param name:     Sträng med tankens namn, t.ex. "M1 Abrams" eller "T-90".
+        :param x:        X-koordinat för tankens mitt.
+        :param bottom_y: Y-koordinat för tankens botten (marknivå).
+        :param facing:   Riktning tanken vänder: 1 = höger, -1 = vänster.
+        :return:         Ett Tank-objekt med korrekt HP, skada och bränsle.
+        """
+
         # Sätt HP, damage och bränsle beroende på tank
         if name in ("M1 Abrams", "T-90"):
             hp   = 210
@@ -107,6 +145,10 @@ class Battle:
         return t
 
     def __end_turn(self):
+        """
+        Växlar aktuell spelare, räknar turer per runda och tilldelar
+        bränslebonus om båda spelare spelat en tur.
+        """
         # Växla spelare
         self.current_player = 2 if self.current_player == 1 else 1
         self.turns_in_round += 1
@@ -118,6 +160,9 @@ class Battle:
             self.right_tank.fuel = min(self.right_tank.max_fuel, self.right_tank.fuel + FUEL_BONUS_PER_ROUND)
 
     def start(self):
+        """
+        Startar spelets huvudloop
+        """
         self.battle_sound.play(loops=-1)
         running = True
         while running:

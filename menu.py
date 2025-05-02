@@ -3,12 +3,20 @@ import gui
 from shared.constants import *
 
 class Menu:
+    """
+    Klass som hanterar spelets huvudmeny, inklusive visning av instruktioner och användarinteraktion.
+    """
     # Konstanter
     SELECT_TANK = 1
     SHOW_RECENT_WINNERS = 2
     QUIT = 3
 
     def __init__(self, screen):
+        """
+        Initierar Menu-objektet med nödvändiga resurser som bilder och ljud.
+
+        :param screen: Pygame-yta där menyn ska ritas.
+        """
         self.screen = screen
         # Ladda och skala menyns bakgrundsbild
         self.war_image = pygame.image.load("assets/images/war_background.jpg")
@@ -23,6 +31,9 @@ class Menu:
 
     # Privat metod som bara får användas i denna klass
     def __show_menu(self):
+        """
+        Privat metod som ritar huvudmenyn och dess knappar samt visar instruktionstexter.
+        """
         # Rita bakgrundsbilden
         self.screen.blit(self.war_image, (0, 0))
         title_text = gui.Text("Battle of Tanks", "assets/fonts/gomarice_monkey_Area.ttf", 80, BLACK, 250, 100)
@@ -50,6 +61,9 @@ class Menu:
         pygame.display.flip()
 
     def __show_instructions(self):
+        """
+        Privat metod som visar spelets instruktioner och bakgrundsinformation.
+        """
         self.screen.fill(GRAY)
         profile_picture = pygame.image.load("assets/images/profile_picture.jpg")
         profile_picture = pygame.transform.scale(profile_picture, (198, 300))
@@ -86,6 +100,12 @@ class Menu:
         pygame.display.flip()
 
     def get_action(self):
+        """
+        Visar menyn, hanterar användarinmatning och returnerar användarens val.
+
+        :return: Ett heltal som representerar användarens menyval:
+                 SELECT_TANK, SHOW_RECENT_WINNERS eller QUIT.
+        """
         clock = pygame.time.Clock()
         instruction_enabled = False
         self.__show_menu()

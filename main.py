@@ -20,16 +20,20 @@ menu = Menu(screen)
 
 
 class GameStates(Enum):
-    """De olika tillstånden som spelet kan befinna sig i.
-    Varje tillstånd har ett unikt värde som identifierar den aktuella fasen av spelet."""
+    """
+    De olika tillstånden som spelet kan befinna sig i.
+    Varje tillstånd har ett unikt värde som identifierar den aktuella fasen av spelet.
+    """
 
     MENU = 1,
     SELECT_TANK = 2,
     RECENT_WINNERS = 3
 
 def start_game():
-    """Startar spelet och hanterar spelets huvudloop samt de olika tillstånden.
-    Spelet initieras i menytillståndet och fortsätter sedan baserat på användarens interaktioner. """
+    """
+    Startar spelet och hanterar spelets huvudloop samt de olika tillstånden.
+    Spelet initieras i menytillståndet och fortsätter sedan baserat på användarens interaktioner.
+    """
 
     running = True
     current_state: GameStates = GameStates.MENU

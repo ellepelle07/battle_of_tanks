@@ -2,7 +2,9 @@ import pygame
 from shared.constants import *
 
 class Button:
-    """ Representerar en knapp i spelet som man kan interagera med"""
+    """
+    Representerar en knapp i spelet som man kan interagera med.
+    """
     def __init__(self, text, x, y, width, height, font):
         """
         :param text:    Texten som visas på knappen
@@ -17,7 +19,8 @@ class Button:
         self.font = font
 
     def draw(self, screen, is_selected):
-        """ Ritar knappen på den angivna skärmen.
+        """
+        Ritar knappen på den angivna skärmen.
         Knappens färg ändras beroende på om den är vald eller inte.
 
         :param screen:      Skärmytan som knappen ska ritas på
@@ -37,11 +40,14 @@ class Button:
 
 
 class Text:
-    """ Representerar en textsträng som kan ritas på skärmen.
-    Denna klass hanterar textens innehåll, typsnitt, storlek, färg och position."""
+    """
+    Representerar en textsträng som kan ritas på skärmen.
+    Denna klass hanterar textens innehåll, typsnitt, storlek, färg och position.
+    """
 
     def __init__(self, text, font_path, font_size, color, x, y):
-        """ Initierar en ny textinstans.
+        """
+        Initierar en ny textinstans.
 
         :param text:            Texten som ska visas
         :param font_path:       Sökvägen till typsnittet
@@ -78,7 +84,8 @@ class Text:
         screen.blit(self.text_surface, self.rect)
 
     def set_text(self, new_text):
-        """ Ändrar texten som visas och uppdaterar den renderade ytan.
+        """
+        Ändrar texten som visas och uppdaterar den renderade ytan.
 
         :param new_text: Den nya texten som ska visas.
         """

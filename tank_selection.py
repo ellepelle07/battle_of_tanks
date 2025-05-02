@@ -12,7 +12,17 @@ TANK_WIDTH = 300
 TANK_HEIGHT = 200
 
 class TankSelection:
+    """
+    Klass för att välja stridsvagnar för de två spelarna.
+    """
+
     def __init__(self, screen):
+        """
+        Initierar TankSelection med skärm, resurser, tankbilder och layout.
+
+        :param screen: Spelskärmen
+        """
+
         self.choose_your_fighter_sound = pygame.mixer.Sound("assets/sound/choose_your_fighter_sound.wav")
         self.screen = screen
         self.screen_width, self.screen_height = screen.get_size()
@@ -68,6 +78,11 @@ class TankSelection:
         self.selection = ["", ""]
 
     def draw(self):
+        """
+        Ritar hela gränssnittet för stridsvagnsvalet inklusive bakgrunder, tankar,
+        texter, symboler och markeringsramar.
+        """
+
         # Rita bakgrunder: vänster halva blå, höger halva röd
         self.screen.fill(BLUE, rect=pygame.Rect(0, 0, self.screen_width // 2, self.screen_height))
         self.screen.fill(RED, rect=pygame.Rect(self.screen_width // 2, 0, self.screen_width // 2, self.screen_height))
@@ -123,7 +138,13 @@ class TankSelection:
 
         pygame.display.flip()
 
-    def handle_event(self, event):
+    def __handle_event(self, event):
+        """
+        Hanterar musinteraktion och uppdaterar spelarens val beroende på klickposition.
+        :param event:   pygame.event.Event – Händelseobjekt från pygame.
+        :return:        Lista med valda tankar
+        """
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = event.pos
             if pos[0] < self.screen_width // 2:
@@ -139,6 +160,11 @@ class TankSelection:
         return self.selection
 
     def run(self):
+        """
+        Startar tankvalets huvudloop. Låter spelare välja sina tanks och returnerar resultatet.
+
+        :return: Lista med två strängar, valda tanks för spelare 1 och 2.
+        """
         running = True
         clock = pygame.time.Clock()
         while running:
@@ -149,7 +175,7 @@ class TankSelection:
                     pygame.quit()
                     quit()
                 else:
-                    self.handle_event(event)
+                    self.__handle_event(event)
             if self.selection[0] and self.selection[1]:
                 running = False
             clock.tick(60)
