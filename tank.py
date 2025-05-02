@@ -75,15 +75,16 @@ class Tank(pygame.sprite.Sprite):
         :param target_y: Y-koordinat dit tanken ska sikta (t.ex. musens y).
         """
         # Beräkna vektor från tankens centrum till målet
-        dx = target_x - self.rect.centerx
+        dx = target_x - self.rect.centerx   # dx= avståndet från tankens mitt till målet
         dy = self.rect.centery - target_y
 
         # Räkna ut rå vinkel i grader
         raw = math.degrees(math.atan2(dy, dx))
+        # Om raw är negativt (t.ex. -45°), lägger vi till 360° för att få ett värde i intervallet [0, 360).
         if raw < 0:
             raw += 360
 
-        # Klipp beroende på vilken sida tanken vänder
+        # Klipp vinkeln efter tankens facing
         if self.facing == 1:
             self.angle = max(0, min(90, int(raw)))
         else:
