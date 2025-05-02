@@ -205,7 +205,13 @@ class Battle:
                         self.engine_sound.stop()
                         self.engine_playing = False
 
-                # Aim
+                # Aim  >>>>>>KOLLA OM MAN KAN INTEGRERA DENNA MED aim-metoden i tank.py<<<<<<<<<
+                # Exempel: i Battle.start() hantera tryck på ↑/↓
+                # if keys[pygame.K_UP]:
+                #     active_tank.aim(+1)
+                # if keys[pygame.K_DOWN]:
+                #     active_tank.aim(-1)
+
                 mx, my = pygame.mouse.get_pos()
                 dx = mx - active_tank.rect.centerx
                 dy = active_tank.rect.centery - my
