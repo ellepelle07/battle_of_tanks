@@ -125,12 +125,12 @@ class Battle:
         # Sätt HP, damage och bränsle beroende på tank
         if name in ("M1 Abrams", "T-90"):
             hp   = 210
-            dmg  = 500
+            dmg  = 50
             fuel = 400
             img  = M1_ABRAMS_IMG if name == "M1 Abrams" else T90_IMG
         else:
             hp   = 155
-            dmg  = 500
+            dmg  = 50
             fuel = 200
             img  = SHERMAN_IMG if name.startswith("Sherman") else T34_IMG
 
@@ -223,7 +223,7 @@ class Battle:
                 # Rita siktlinje
                 rad = math.radians(active_tank.angle)
                 sx, sy = active_tank.rect.center
-                ex = sx + AIM_LINE_LENGTH * math.cos(rad)
+                ex = sx + AIM_LINE_LENGTH * math.cos(rad)  # cos och sin ger förskjutningen i x- respektive y-led
                 ey = sy - AIM_LINE_LENGTH * math.sin(rad)
                 draw_dashed_line(self.screen, WHITE, (sx, sy), (ex, ey), 10)
 
@@ -235,12 +235,13 @@ class Battle:
                 if self.projectile is None:
                     self.projectile = active_tank.shoot()
 
-            # Projektiluppdatering
+            # Projektiluppdatering: om en projektil existererar ska renderingen och fysiken hanteras
             if self.projectile:
                 self.projectile.draw_projectile(self.screen)
                 self.projectile.update_projectile(dt)
                 target = self.right_tank if self.current_player == 1 else self.left_tank
                 if target.rect.collidepoint(self.projectile.x, self.projectile.y):
+                    #target.move(-5) if self.current_player == 1 else target.move(5)  <<<för push-back effekt>>>
                     target.take_damage(active_tank.damage)
                     self.__explode_projectile()
                 elif self.projectile.is_off_screen(self.screen_width, self.screen_height):
