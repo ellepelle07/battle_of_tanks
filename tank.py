@@ -36,7 +36,7 @@ class Tank(pygame.sprite.Sprite):
         self.y = y
         self.facing = facing
         # Standardvinkel beroende på riktning
-        self.angle = 45 if self.facing == 1 else 135
+        self.angle = None
 
         # Ladda och skala tankbilden
         self.image = pygame.image.load(image_path)
@@ -83,9 +83,9 @@ class Tank(pygame.sprite.Sprite):
         dx = target_x - self.rect.centerx   # dx = avståndet från tankens mitt till målet
         dy = self.rect.centery - target_y
 
-        # Räkna ut rå vinkel i grader
+        # Räkna ut rå vinkel i grader     (math.atan2(dy, dx)) är vinkeln i radianer
         raw = math.degrees(math.atan2(dy, dx))
-        # Om raw är negativt (t.ex. -45°), lägger vi till 360° för att få ett värde i intervallet [0, 360).
+        # Om raw är negativt (t.ex. -45°), lägger vi till 360° för att få ett värde i intervallet [0, 360].
         if raw < 0:
             raw += 360
 
@@ -101,9 +101,12 @@ class Tank(pygame.sprite.Sprite):
 
         :return: En Projectile-instans initierad för skjutningen.
         """
+        # tar tankens siktvinkel i grader (self.angle) och gör om den till radianer (rad)
         rad = math.radians(self.angle)
         start_x, start_y = self.rect.center
+        # Hur snabbt det ska röra sig i sidled
         vx = self.projectile_speed * math.cos(rad)
+        # Hur snabbt det ska röra sig upp/ned
         vy = -self.projectile_speed * math.sin(rad)
         return Projectile(start_x, start_y, vx, vy)
 

@@ -34,6 +34,7 @@ class Projectile(pygame.sprite.Sprite):
         Använder kinematiska rörelseekvationer med en konstant gravitationsacceleration.
         :param dt: Tidsdifferens sedan senaste uppdatering (sekunder).
         """
+# https://www.kaggle.com/code/dawith/python-for-kinematics-motion-diagram
         g = 300  # pixels/s^2      # GRAVIATION
         self.x += self.vx * dt                       # Horisontell förflyttning
         self.y += self.vy * dt + 0.5 * g * dt * dt   # Kinematikformeln: Vertikal förflyttning med konstant acceleration

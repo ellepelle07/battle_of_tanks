@@ -177,6 +177,10 @@ class Battle:
             self.screen.blit(background_image, (0, 0))
             self.puddle.draw(self.screen)
 
+            # Rita tankarna
+            self.left_tank.draw_tank(self.screen)
+            self.right_tank.draw_tank(self.screen)
+
             # Ett flyttal som säger hur många sekunder som förflutit sedan förra uppdateringen.
             dt = self.clock.tick(60) / 1000.0
 
@@ -233,6 +237,7 @@ class Battle:
 
             # Projektiluppdatering
             if self.projectile:
+                self.projectile.draw_projectile(self.screen)
                 self.projectile.update_projectile(dt)
                 target = self.right_tank if self.current_player == 1 else self.left_tank
                 if target.rect.collidepoint(self.projectile.x, self.projectile.y):
@@ -242,14 +247,6 @@ class Battle:
                     self.__explode_projectile()
                 elif self.projectile.y > GROUND_LEVEL:
                     self.__explode_projectile()
-
-            # Rita allt
-            self.left_tank.draw_tank(self.screen)
-            self.right_tank.draw_tank(self.screen)
-
-
-            if self.projectile:
-                self.projectile.draw_projectile(self.screen)
 
             # Explosioner
             for ex in self.explosions_active:
