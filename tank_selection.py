@@ -86,9 +86,9 @@ class TankSelection:
         self.screen.fill(RED, rect=pygame.Rect(self.screen_width // 2, 0, self.screen_width // 2, self.screen_height))
 
         # Rita texter
-        self.usa_label.draw(self.screen)
-        self.soviet_label.draw(self.screen)
-        self.title_text.draw(self.screen)
+        self.usa_label.draw_text(self.screen)
+        self.soviet_label.draw_text(self.screen)
+        self.title_text.draw_text(self.screen)
 
         # Rita stridsvagnarna
         self.screen.blit(self.usa_tank1_img, self.player1_tank1_rect)
@@ -97,10 +97,10 @@ class TankSelection:
         self.screen.blit(self.russia_tank2_img, self.player2_tank2_rect)
 
         # Rita tanktitlar
-        self.tank1_title_usa.draw(self.screen)
-        self.tank2_title_usa.draw(self.screen)
-        self.tank1_title_soviet.draw(self.screen)
-        self.tank2_title_soviet.draw(self.screen)
+        self.tank1_title_usa.draw_text(self.screen)
+        self.tank2_title_usa.draw_text(self.screen)
+        self.tank1_title_soviet.draw_text(self.screen)
+        self.tank2_title_soviet.draw_text(self.screen)
 
         # Rita symboler:
         # De övre tankarna får hp_symbol i övre vänstra hörnet

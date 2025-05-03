@@ -242,24 +242,26 @@ class Battle:
                     self.__explode_projectile()
 
             # Rita allt
-            self.left_tank.draw(self.screen)
-            self.right_tank.draw(self.screen)
+            self.left_tank.draw_tank(self.screen)
+            self.right_tank.draw_tank(self.screen)
+
 
             if self.projectile:
-                self.projectile.draw(self.screen)
+                self.projectile.draw_projectile(self.screen)
 
+            # Explosion
             for ex in self.explosions_active:
                 ex.update(dt)
-                ex.draw(self.screen)  # Anropar dynamiskt Projectile-klassens draw-metod
+                ex.draw_explosions(self.screen)
                 if ex.finished:
                     self.explosions_active.remove(ex)
 
             # Runda & bränsle‐info
-            Text(f"Runda: {self.round_counter}",  None, 40, BLACK, SCREEN_WIDTH // 2 - 60, 20).draw(self.screen)
-            Text(f"Bränsle USA: {int(self.left_tank.fuel)}",  None, 24, BLACK, 20, 50).draw(self.screen)
-            Text(f"Bränsle Ryssland: {int(self.right_tank.fuel)}", None, 24, BLACK, SCREEN_WIDTH-190, 50).draw(self.screen)
+            Text(f"Runda: {self.round_counter}",  None, 40, BLACK, SCREEN_WIDTH // 2 - 60, 20).draw_text(self.screen)
+            Text(f"Bränsle USA: {int(self.left_tank.fuel)}",  None, 24, BLACK, 20, 50).draw_text(self.screen)
+            Text(f"Bränsle Ryssland: {int(self.right_tank.fuel)}", None, 24, BLACK, SCREEN_WIDTH-190, 50).draw_text(self.screen)
 
-            self.info_text.draw(self.screen)
+            self.info_text.draw_text(self.screen)
             pygame.display.flip()
 
             if self.left_tank.is_dead() or self.right_tank.is_dead():
@@ -276,7 +278,7 @@ class Battle:
         # Visa vinnarmeddelande
         msg = Text(f"{winner_tank} / {winner_name} vann!", None, 60, BLACK, 500, self.screen_height//2-30)
         self.screen.fill(BLUE) if winner_player == 1 else self.screen.fill(RED)
-        msg.draw(self.screen)
+        msg.draw_text(self.screen)
         pygame.display.flip()
         self.battle_sound.fadeout(4000)
         pygame.time.wait(4000)

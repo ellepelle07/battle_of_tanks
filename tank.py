@@ -125,7 +125,7 @@ class Tank(pygame.sprite.Sprite):
         """
         return self.hp == 0
 
-    def draw(self, screen):
+    def draw_tank(self, screen):
         """Renderar tanken och dess status på skärmen - HP och bränsle.
 
         :param screen: pygame.Surface där tanken ritas."""

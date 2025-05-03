@@ -75,7 +75,7 @@ class Text:
         self.text_surface = self.font.render(self.text, True, self.color)
         self.rect = self.text_surface.get_rect(topleft=(self.x, self.y))
 
-    def draw(self, screen):
+    def draw_text(self, screen):
         """
         Ritar texten på den angivna skärmen.
 

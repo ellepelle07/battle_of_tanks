@@ -74,11 +74,11 @@ def show_winner(screen):
     running = True
     while running:
         screen.blit(recent_winner_image, (0, 0))
-        title_text.draw(screen)
+        title_text.draw_text(screen)
 
         for txt in winner_texts:
-            txt.draw(screen)
-        back_text.draw(screen)
+            txt.draw_text(screen)
+        back_text.draw_text(screen)
         pygame.display.flip()
 
         for event in pygame.event.get():

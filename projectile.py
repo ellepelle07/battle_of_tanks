@@ -42,7 +42,7 @@ class Projectile(pygame.sprite.Sprite):
         # Konvertera flyttal till heltal då pygame.Rect kräver heltalskoordinater
         self.rect.center = (int(self.x), int(self.y))
 
-    def draw(self, screen):
+    def draw_projectile(self, screen):
         """
         Ritar projektilen på den givna ytan.
 

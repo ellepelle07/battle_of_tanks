@@ -37,7 +37,7 @@ class Menu:
         # Rita bakgrundsbilden
         self.screen.blit(self.war_image, (0, 0))
         title_text = gui.Text("Battle of Tanks", "assets/fonts/gomarice_monkey_Area.ttf", 80, BLACK, 250, 100)
-        title_text.draw(self.screen)
+        title_text.draw_text(self.screen)
         button_font = pygame.font.Font(None, 35)
 
         # Instruktionstexter
@@ -50,7 +50,7 @@ class Menu:
 
         # Rita instruktionstexterna
         for text in instructions_text:
-            text.draw(self.screen)
+            text.draw_text(self.screen)
 
         # Skapa knappar – notera att knappen för "Senaste Vinnare" nu bara skickar en signal
         self.buttons = [
@@ -69,10 +69,10 @@ class Menu:
         profile_picture = pygame.transform.scale(profile_picture, (198, 300))
         # Rita profilbild och text
         self.screen.blit(profile_picture, (SCREEN_WIDTH - 400, 15))
-        gui.Text("CREDIT: Elias El Shobaki", None, 30, BLACK, SCREEN_WIDTH - 400, 320).draw(self.screen)
-        gui.Text("Programmering 1", None, 30, BLACK, SCREEN_WIDTH - 400, 360).draw(self.screen)
-        gui.Text("2025", None, 30, BLACK, SCREEN_WIDTH - 400, 390).draw(self.screen)
-        gui.Text("Betyg:  A?", None, 30,BLACK, SCREEN_WIDTH - 400, 430 ).draw(self.screen)
+        gui.Text("CREDIT: Elias El Shobaki", None, 30, BLACK, SCREEN_WIDTH - 400, 320).draw_text(self.screen)
+        gui.Text("Programmering 1", None, 30, BLACK, SCREEN_WIDTH - 400, 360).draw_text(self.screen)
+        gui.Text("2025", None, 30, BLACK, SCREEN_WIDTH - 400, 390).draw_text(self.screen)
+        gui.Text("Betyg:  A?", None, 30,BLACK, SCREEN_WIDTH - 400, 430 ).draw_text(self.screen)
 
         instructions_text = [
             gui.Text("Om spelet:", "assets/fonts/gomarice_kamone_6.ttf", 40, BLACK, 20, 20),
@@ -95,7 +95,7 @@ class Menu:
             gui.Text("Tryck 'ESC' för att gå tillbaka till menyn.", None, 30, BLACK, 20, 450),
         ]
         for text in instructions_text:
-            text.draw(self.screen)
+            text.draw_text(self.screen)
 
         pygame.display.flip()
 
