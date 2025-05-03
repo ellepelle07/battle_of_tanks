@@ -51,7 +51,7 @@ class Explosion:
         self.finished = False
         explosion_sound.play()
 
-    def update(self, dt):
+    def update_explosions(self, dt):
         """
         Uppdaterar explosionens animeringsstatus baserat på tid.
 

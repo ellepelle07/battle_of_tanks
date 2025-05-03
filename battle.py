@@ -231,7 +231,7 @@ class Battle:
 
             # Projektiluppdatering
             if self.projectile:
-                self.projectile.update(dt)
+                self.projectile.update_projectile(dt)
                 target = self.right_tank if self.current_player == 1 else self.left_tank
                 if target.rect.collidepoint(self.projectile.x, self.projectile.y):
                     target.take_damage(active_tank.damage)
@@ -249,9 +249,9 @@ class Battle:
             if self.projectile:
                 self.projectile.draw_projectile(self.screen)
 
-            # Explosion
+            # Explosioner
             for ex in self.explosions_active:
-                ex.update(dt)
+                ex.update_explosions(dt)
                 ex.draw_explosions(self.screen)
                 if ex.finished:
                     self.explosions_active.remove(ex)

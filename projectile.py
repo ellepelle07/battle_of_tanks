@@ -27,7 +27,7 @@ class Projectile(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (20, 20))
         self.rect = self.image.get_rect(center=(x, y))
 
-    def update(self, dt):
+    def update_projectile(self, dt):
         """
         Uppdaterar projektilens fysik och position baserat på delta time.
 

@@ -75,7 +75,8 @@ class TankSelection:
 
         self.selection = ["", ""]
 
-    def draw(self):
+
+    def __draw_tank_selection(self):
         """
         Ritar hela gränssnittet för stridsvagnsvalet inklusive bakgrunder, tankar,
         texter, symboler och markeringsramar.
@@ -166,7 +167,7 @@ class TankSelection:
         running = True
         clock = pygame.time.Clock()
         while running:
-            self.draw()
+            self.__draw_tank_selection()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
