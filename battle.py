@@ -45,21 +45,23 @@ def draw_dashed_line(screen, color, start_pos, end_pos, dash_length=10):
     :param color:       Färg på linjen som en RGB-tuple, t.ex. (255, 0, 0).
     :param start_pos:   Startkoordinat som tuple (x, y).
     :param end_pos:     Slutkoordinat som tuple (x, y).
-    :param dash_length: Längd på varje streck i pixlar (standard=10).
+    :param dash_length: Önskade längden för varje streck på linjen i pixlar (standard=10).
     """
 
     x1, y1 = start_pos
     x2, y2 = end_pos
     dx = x2 - x1
     dy = y2 - y1
-    distance = int((dx**2 + dy**2)**0.5)
+    distance = int((dx**2 + dy**2)**0.5)   # Phytagoras sats
     dash_count = distance // dash_length
 
     for i in range(dash_count):
-        start_x = x1 + (dx * i / dash_count)
+        # Beräkna streckets startpunkt
+        start_x = x1 + (dx * i / dash_count)   # dx * 'i / dash_count' är hur långt på vägen strecket har kommit (i procent).
         start_y = y1 + (dy * i / dash_count)
-        end_x = x1 + (dx * (i + 0.5) / dash_count)
-        end_y = y1 + (dy * (i + 0.5) / dash_count)
+        # Beräkna streckets slutpunkt
+        end_x = x1 + (dx * (i + 0.3) / dash_count)  # '(i + 0.3)/dash_count'
+        end_y = y1 + (dy * (i + 0.3) / dash_count)
         pygame.draw.line(screen, color, (start_x, start_y), (end_x, end_y), 3)
 
 
