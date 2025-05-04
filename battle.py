@@ -15,8 +15,6 @@ from random import randint
 AIM_LINE_LENGTH = 320
 GROUND_LEVEL = SCREEN_HEIGHT - 92
 FUEL_BONUS_PER_ROUND = 15    # Bränslebonus varje hel runda
-TARGET_AREA_COLOR = (255, 0, 0)
-
 
 # Ladda bakgrundsbild
 background_image = pygame.image.load("assets/images/battlefield_background.jpg")
@@ -33,11 +31,10 @@ class GamePhases(Enum):
     """
 
     MOVE = 1,
-    AIM = 2,
-    SHOOT = 3
+    SHOOT = 2
 
 
-def draw_dashed_line(screen, color, start_pos, end_pos, dash_length=10):
+def draw_dashed_line(screen, color, start_pos, end_pos, line_length, dash_length=10):
     """
     Ritar en streckad linje mellan två punkter på given skärm.
 
@@ -45,6 +42,7 @@ def draw_dashed_line(screen, color, start_pos, end_pos, dash_length=10):
     :param color:       Färg på linjen som en RGB-tuple, t.ex. (255, 0, 0).
     :param start_pos:   Startkoordinat som tuple (x, y).
     :param end_pos:     Slutkoordinat som tuple (x, y).
+    :param line_length: Längden på linjen
     :param dash_length: Önskade längden för varje streck på linjen i pixlar (standard=10).
     """
 
@@ -52,15 +50,15 @@ def draw_dashed_line(screen, color, start_pos, end_pos, dash_length=10):
     x2, y2 = end_pos
     dx = x2 - x1
     dy = y2 - y1
-    distance = int((dx**2 + dy**2)**0.5)   # Phytagoras sats
-    dash_count = distance // dash_length
+
+    dash_count = int(line_length) // dash_length
 
     for i in range(dash_count):
         # Beräkna streckets startpunkt
         start_x = x1 + (dx * i / dash_count)   # dx * 'i / dash_count' är hur långt på vägen strecket har kommit (i procent).
         start_y = y1 + (dy * i / dash_count)
         # Beräkna streckets slutpunkt
-        end_x = x1 + (dx * (i + 0.3) / dash_count)  # '(i + 0.3)/dash_count'
+        end_x = x1 + (dx * (i + 0.3) / dash_count)  # addera med 0.3 för att skapa mellanrum
         end_y = y1 + (dy * (i + 0.3) / dash_count)
         pygame.draw.line(screen, color, (start_x, start_y), (end_x, end_y), 3)
 
@@ -95,8 +93,9 @@ class Battle:
         self.round_counter = 1
         self.turns_in_round = 0
         self.info_text = Text("", None, 30, BLACK, 50, 20)
+
         self.left_tank  = self.__create_tank(selected_tanks[0], 100, GROUND_LEVEL, facing=1)
-        self.right_tank = self.__create_tank(selected_tanks[1], self.screen_width-200, GROUND_LEVEL, facing=-1)
+        self.right_tank = self.__create_tank(selected_tanks[1], self.screen_width-100, GROUND_LEVEL, facing=-1)
 
         # Starta spelet redan vid initieringen
         self.__start()
@@ -125,12 +124,12 @@ class Battle:
         # Sätt HP, damage och bränsle beroende på tank
         if name in ("M1 Abrams", "T-90"):
             hp   = 210
-            dmg  = 50
-            fuel = 400
+            dmg  = 35
+            fuel = 500
             img  = M1_ABRAMS_IMG if name == "M1 Abrams" else T90_IMG
         else:
             hp   = 155
-            dmg  = 50
+            dmg  = 65
             fuel = 200
             img  = SHERMAN_IMG if name.startswith("Sherman") else T34_IMG
 
@@ -139,15 +138,13 @@ class Battle:
             name=name,
             max_hp=hp,
             damage=dmg,
-            x=x, y=bottom_y,
+            start_x=x, start_bottom_y=bottom_y,
             image_path=img,
             screen_width=self.screen_width,
             facing=facing,
             max_fuel=fuel
-
         )
-        t.rect.bottom = bottom_y
-        t.x = t.rect.centerx
+
         return t
 
     def __end_turn(self):
@@ -172,17 +169,18 @@ class Battle:
         self.battle_sound.play(loops=-1)
         running = True
         while running:
+            # Ett flyttal som säger hur många sekunder som förflutit sedan förra uppdateringen.
+            dt = self.clock.tick(60) / 1000.0
+
             mouse_down_btn = False
             active_tank = self.left_tank if self.current_player == 1 else self.right_tank
             self.screen.blit(background_image, (0, 0))
-            self.puddle.draw(self.screen)
+            self.puddle.draw_obstacle(self.screen)
 
             # Rita tankarna
             self.left_tank.draw_tank(self.screen)
             self.right_tank.draw_tank(self.screen)
 
-            # Ett flyttal som säger hur många sekunder som förflutit sedan förra uppdateringen.
-            dt = self.clock.tick(60) / 1000.0
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -196,7 +194,7 @@ class Battle:
             # MOVE-fasen
             if self.current_phase == GamePhases.MOVE:
                 self.info_text.set_text(f"Spelare {self.current_player}: Flytta, sikta och tryck SPACE för att skjuta")
-                moved = False
+                moved = None
                 if keys[pygame.K_a] or keys[pygame.K_LEFT]:
                     moved = active_tank.move(-1)
                     if self.puddle.collides_with(active_tank.rect):
@@ -212,9 +210,8 @@ class Battle:
                         self.engine_playing = True
                 else:
                     # Stoppa motorljudet om ingen tangent trycks
-                    if self.engine_playing:
-                        self.engine_sound.stop()
-                        self.engine_playing = False
+                    self.engine_sound.stop()
+                    self.engine_playing = False
 
                 # Sikta med mus
                 mx, my = pygame.mouse.get_pos()
@@ -225,7 +222,7 @@ class Battle:
                 sx, sy = active_tank.rect.center
                 ex = sx + AIM_LINE_LENGTH * math.cos(rad)  # cos och sin ger förskjutningen i x- respektive y-led
                 ey = sy - AIM_LINE_LENGTH * math.sin(rad)
-                draw_dashed_line(self.screen, WHITE, (sx, sy), (ex, ey), 10)
+                draw_dashed_line(self.screen, WHITE, (sx, sy), (ex, ey), AIM_LINE_LENGTH, 10)
 
                 if keys[pygame.K_SPACE] or mouse_down_btn:
                     self.current_phase = GamePhases.SHOOT

@@ -15,7 +15,7 @@ class Obstacle:
         self.image = image
         self.rect = self.image.get_rect(center=pos)
 
-    def draw(self, surface):
+    def draw_obstacle(self, surface):
         """
         Renderar hindret på den angivna ytan.
 

@@ -18,7 +18,8 @@ pygame.display.set_caption("Battle of Tanks - by Elias El Shobaki - Copyright (C
 # Initiera menyn (bakgrundsbild)
 menu = Menu(screen)
 
-
+# Enum behövs för att definiera en enumeration, vilket gör att GameStates.MENU, GameStates.SELECT_TANK osv.
+# blir tydliga och fasta konstanter i stället för vanliga variabler
 class GameStates(Enum):
     """
     De olika tillstånden som spelet kan befinna sig i.

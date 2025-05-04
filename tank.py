@@ -13,27 +13,25 @@ class Tank(pygame.sprite.Sprite):
     """
     Representerar en spelbar stridsvagn.
     """
-    def __init__(self, name, max_hp, damage, x, y, image_path, screen_width, facing=1, max_fuel=100):
+    def __init__(self, name, max_hp, damage, start_x, start_bottom_y, image_path, screen_width, facing=1, max_fuel=100):
         """
         Initierar en Tank-instans med alla dess attribut och resurser.
 
-        :param name:         Sträng som identifierar tanktypen.
-        :param max_hp:       Maximal hälsa (HP) för tanken.
-        :param damage:       Skadevärdet projektilen kommer att åstadkomma.
-        :param x:            Startpositionens x-koordinat (mitten).
-        :param y:            Startpositionens y-koordinat (mitten).
-        :param image_path:   Sökväg till bildfil för tanken.
-        :param screen_width: Skärmens bredd används för gränskoll.
-        :param facing:       Riktning tanken vänder (1=höger, -1=vänster).
-        :param max_fuel:     Det maximala bränslet en tank kan ha.
+        :param name:            Sträng som identifierar tanktypen.
+        :param max_hp:          Maximal hälsa (HP) för tanken.
+        :param damage:          Skadevärdet projektilen kommer att åstadkomma.
+        :param start_x:         Startpositionens x-koordinat (mitten).
+        :param start_bottom_y:  Startpositionens y-koordinat (botten).
+        :param image_path:      Sökväg till bildfil för tanken.
+        :param screen_width:    Skärmens bredd används för gränskoll.
+        :param facing:          Riktning tanken vänder (1=höger, -1=vänster).
+        :param max_fuel:        Det maximala bränslet en tank kan ha.
         """
         super().__init__()  # Anropar basklassens __init__ för att initiera Sprite-funktionalitet
         self.name = name
         self.max_hp = max_hp
         self.hp = max_hp
         self.damage = damage
-        self.x = x
-        self.y = y
         self.facing = facing
         # Standardvinkel beroende på riktning
         self.angle = None
@@ -44,9 +42,8 @@ class Tank(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.image, facing == 1, False)
 
         self.screen_width = screen_width
-        # Skapar en pygame.Rect (rektangel) med samma bredd och höjd som bilden
-        # centrerad vid (x, y) för att hantera både positionering och kollisioner
-        self.rect = self.image.get_rect(center=(x, y))
+
+        self.rect = self.image.get_rect(centerx= start_x, bottom= start_bottom_y)
 
         # Projektilhastighet
         self.projectile_speed = 550
@@ -66,34 +63,31 @@ class Tank(pygame.sprite.Sprite):
             self.fuel -= self.fuel_consumption_per_move
             if self.fuel < 0:
                 self.fuel = 0
-            if 0 <= (self.x + dx) <= self.screen_width:
-                self.x += dx
-                self.rect.centerx = self.x
+            if 0 <= (self.rect.centerx + dx) <= self.screen_width:
+                self.rect.centerx += dx
+
             return True  # Rörelse lyckades
         return False  # Ingen rörelse på grund av bränslebrist
 
-    def aim(self, target_x, target_y):
+    def aim(self, mx, my):
         """
         Siktar på en punkt (t.ex. muspekaren), klipper vinkeln efter facing.
 
-        :param target_x: X-koordinat dit tanken ska sikta (t.ex. musens x).
-        :param target_y: Y-koordinat dit tanken ska sikta (t.ex. musens y).
+        :param mx: X-koordinat dit tanken ska sikta (musens x).
+        :param my: Y-koordinat dit tanken ska sikta (musens y).
         """
         # Beräkna vektor från tankens centrum till målet
-        dx = target_x - self.rect.centerx   # dx = avståndet från tankens mitt till målet
-        dy = self.rect.centery - target_y
+        dx = mx - self.rect.centerx  # dx = avståndet från tankens mitt till musen
+        dy = self.rect.centery - my
 
         # Räkna ut rå vinkel i grader     (math.atan2(dy, dx)) är vinkeln i radianer
-        raw = math.degrees(math.atan2(dy, dx))
-        # Om raw är negativt (t.ex. -45°), lägger vi till 360° för att få ett värde i intervallet [0, 360].
-        if raw < 0:
-            raw += 360
+        raw_degree = math.degrees(math.atan2(dy, dx))
 
         # Klipp vinkeln efter tankens facing
         if self.facing == 1:
-            self.angle = max(0, min(90, int(raw)))
+            self.angle = max(0, min(90, int(raw_degree)))
         else:
-            self.angle = max(90, min(180, int(raw)))
+            self.angle = max(90, min(180, int(raw_degree)))
 
     def shoot(self):
         """
