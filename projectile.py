@@ -8,24 +8,24 @@ class Projectile(pygame.sprite.Sprite):
     Uppdaterar position och hastighet, ritar sig själv och kan
     kontrollera om den lämnat skärmen.
     """
-    def __init__(self, x, y, vx, vy):
+    def __init__(self, start_x, start_y, vx, vy):
         """
         Initierar projektilen med dess startposition och hastighet.
 
-        :param x:  Startkoordinat på x-axeln (i pixlar).
-        :param y:  Startkoordinat på y-axeln (i pixlar).
+        :param start_x:  Startkoordinat på x-axeln (i pixlar).
+        :param start_y:  Startkoordinat på y-axeln (i pixlar).
         :param vx: Initial hastighet i x-led (pixlar/sekund).
         :param vy: Initial hastighet i y-led (pixlar/sekund).
         """
         super().__init__()
-        self.x = x
-        self.y = y
+        self.x = start_x
+        self.y = start_y
         self.vx = vx
         self.vy = vy
         # Ladda och skala projektilbilden
-        self.image = pygame.image.load("assets/sprites/bullet.png").convert_alpha()
+        self.image = pygame.image.load("assets/sprites/bullet.png")
         self.image = pygame.transform.scale(self.image, (20, 20))
-        self.rect = self.image.get_rect(center=(x, y))
+        self.rect = self.image.get_rect(center=(start_x, start_y))
 
     def update_projectile(self, dt):
         """

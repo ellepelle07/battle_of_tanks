@@ -39,7 +39,7 @@ class Tank(pygame.sprite.Sprite):
         # Ladda och skala tankbilden
         self.image = pygame.image.load(image_path)
         self.image = pygame.transform.scale(self.image, (120, 70))
-        self.image = pygame.transform.flip(self.image, facing == 1, False)
+        self.image = pygame.transform.flip(self.image, facing == 1, False)  # Om facing=1 --> True, annars om -1=1 --> False
 
         self.screen_width = screen_width
 
@@ -65,7 +65,6 @@ class Tank(pygame.sprite.Sprite):
                 self.fuel = 0
             if 0 <= (self.rect.centerx + dx) <= self.screen_width:
                 self.rect.centerx += dx
-
             return True  # Rörelse lyckades
         return False  # Ingen rörelse på grund av bränslebrist
 

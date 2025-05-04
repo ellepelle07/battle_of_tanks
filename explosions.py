@@ -7,6 +7,8 @@ resources_loaded = False
 explosion_images = []
 explosion_sound: pygame.mixer.Sound
 
+# Lägger inte detta i initieringen eftersom det tar tid att ladda bilder från mina filer.
+# Därför vill man tima denna funktion så att den inte stör spelet.
 def load_explosion_resources():
     """
     Laddar explosioners bilder och ljud om de inte redan är laddade.
@@ -62,9 +64,9 @@ class Explosion:
         """
 
         self.timer += dt
-        if self.timer >= 0.1:
+        if self.timer >= 0.15:  # Hur länge varje bild ska vara på skärmen
             self.timer = 0
-            self.frame += 1
+            self.frame += 1     # Frame = vilken bild den är på
             if self.frame >= len(self.images):
                 self.finished = True
 

@@ -65,7 +65,7 @@ def show_winner(screen):
     winner_texts = []
 
     for i, w in enumerate(winners):
-        text = f"{i+1}. {w['name']} – {w['country']} - {w['tank']} "
+        text = f"{i+1}. {w['name']} – {w['country']} - {w['tank']}"
         winner_texts.append(gui.Text(text, None, 30, BLACK, 100, y_offset))
         y_offset += 40
 

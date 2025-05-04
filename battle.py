@@ -14,7 +14,7 @@ from random import randint
 # Inställningar
 AIM_LINE_LENGTH = 320
 GROUND_LEVEL = SCREEN_HEIGHT - 92
-FUEL_BONUS_PER_ROUND = 15    # Bränslebonus varje hel runda
+FUEL_BONUS_PER_ROUND = 25    # Bränslebonus varje hel runda
 
 # Ladda bakgrundsbild
 background_image = pygame.image.load("assets/images/battlefield_background.jpg")
@@ -34,7 +34,7 @@ class GamePhases(Enum):
     SHOOT = 2
 
 
-def draw_dashed_line(screen, color, start_pos, end_pos, line_length, dash_length=10):
+def draw_dashed_line(screen, color, start_pos, end_pos, dash_length=10):
     """
     Ritar en streckad linje mellan två punkter på given skärm.
 
@@ -42,7 +42,6 @@ def draw_dashed_line(screen, color, start_pos, end_pos, line_length, dash_length
     :param color:       Färg på linjen som en RGB-tuple, t.ex. (255, 0, 0).
     :param start_pos:   Startkoordinat som tuple (x, y).
     :param end_pos:     Slutkoordinat som tuple (x, y).
-    :param line_length: Längden på linjen
     :param dash_length: Önskade längden för varje streck på linjen i pixlar (standard=10).
     """
 
@@ -51,7 +50,7 @@ def draw_dashed_line(screen, color, start_pos, end_pos, line_length, dash_length
     dx = x2 - x1
     dy = y2 - y1
 
-    dash_count = int(line_length) // dash_length
+    dash_count = AIM_LINE_LENGTH // dash_length
 
     for i in range(dash_count):
         # Beräkna streckets startpunkt
@@ -222,7 +221,7 @@ class Battle:
                 sx, sy = active_tank.rect.center
                 ex = sx + AIM_LINE_LENGTH * math.cos(rad)  # cos och sin ger förskjutningen i x- respektive y-led
                 ey = sy - AIM_LINE_LENGTH * math.sin(rad)
-                draw_dashed_line(self.screen, WHITE, (sx, sy), (ex, ey), AIM_LINE_LENGTH, 10)
+                draw_dashed_line(self.screen, WHITE, (sx, sy), (ex, ey), 10)
 
                 if keys[pygame.K_SPACE] or mouse_down_btn:
                     self.current_phase = GamePhases.SHOOT
@@ -237,10 +236,10 @@ class Battle:
                 self.projectile.draw_projectile(self.screen)
                 self.projectile.update_projectile(dt)
                 target = self.right_tank if self.current_player == 1 else self.left_tank
-                if target.rect.collidepoint(self.projectile.x, self.projectile.y):
+                if target.rect.colliderect(self.projectile.rect):
                     #target.move(-5) if self.current_player == 1 else target.move(5)  <<<för push-back effekt>>>
-                    target.take_damage(active_tank.damage)
                     self.__explode_projectile()
+                    target.take_damage(active_tank.damage)
                 elif self.projectile.is_off_screen(self.screen_width, self.screen_height):
                     self.__explode_projectile()
                 elif self.projectile.y > GROUND_LEVEL:
