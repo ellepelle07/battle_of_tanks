@@ -28,10 +28,10 @@ class TankSelection:
         # Ladda och skala bilder för USA-tankar
         self.usa_tank1_img = pygame.image.load("assets/sprites/M1_ABRAMS.png")
         self.usa_tank1_img = pygame.transform.scale(self.usa_tank1_img, (TANK_WIDTH, TANK_HEIGHT))
-        self.usa_tank1_img = pygame.transform.flip(self.usa_tank1_img, True, False)
+#        self.usa_tank1_img = pygame.transform.flip(self.usa_tank1_img, True, False)
         self.usa_tank2_img = pygame.image.load("assets/sprites/SHERMAN.png")
         self.usa_tank2_img = pygame.transform.scale(self.usa_tank2_img, (TANK_WIDTH, TANK_HEIGHT))
-        self.usa_tank2_img = pygame.transform.flip(self.usa_tank2_img, True, False)
+#        self.usa_tank2_img = pygame.transform.flip(self.usa_tank2_img, True, False)
 
         # Ladda och skala bilder för ryska tankar
         self.russia_tank1_img = pygame.image.load("assets/sprites/T90.png")
