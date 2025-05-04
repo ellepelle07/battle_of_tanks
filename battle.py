@@ -196,11 +196,11 @@ class Battle:
                 moved = None
                 if keys[pygame.K_a] or keys[pygame.K_LEFT]:
                     moved = active_tank.move(-1)
-                    if self.puddle.collides_with(active_tank.rect):
+                    if self.puddle.rect.colliderect(active_tank.rect):
                         moved = active_tank.move(1)
                 if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
                     moved = active_tank.move(1)
-                    if self.puddle.collides_with(active_tank.rect):
+                    if self.puddle.rect.colliderect(active_tank.rect):
                         moved = active_tank.move(-1)
 
                 if moved:  # Om rörelsen lyckades
@@ -240,10 +240,10 @@ class Battle:
                     #target.move(-5) if self.current_player == 1 else target.move(5)  <<<för push-back effekt>>>
                     self.__explode_projectile()
                     target.take_damage(active_tank.damage)
-                elif self.projectile.is_off_screen(self.screen_width, self.screen_height):
+                elif self.projectile.x < 0 or self.projectile.x > self.screen_width or self.projectile.y > GROUND_LEVEL or self.projectile.y < 0:
                     self.__explode_projectile()
-                elif self.projectile.y > GROUND_LEVEL:
-                    self.__explode_projectile()
+                # elif self.projectile.y > GROUND_LEVEL:
+                #     self.__explode_projectile()
 
             # Explosioner
             for ex in self.explosions_active:

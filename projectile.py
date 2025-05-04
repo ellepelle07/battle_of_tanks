@@ -50,14 +50,3 @@ class Projectile(pygame.sprite.Sprite):
         :param screen: pygame.Surface där projektilen ska ritas.
         """
         screen.blit(self.image, self.rect)
-
-    def is_off_screen(self, screen_width, screen_height):
-        """
-        Kontrollerar om projektilen har lämnat skärmområdet.
-
-        :param screen_width:  Bredden på skärmen (pixlar).
-        :param screen_height: Höjden på skärmen (pixlar).
-        :return:              True om projektilens centrum är utanför skärmen, annars False.
-        """
-        return (self.x < 0 or self.x > screen_width
-                or self.y < 0 or self.y > screen_height)

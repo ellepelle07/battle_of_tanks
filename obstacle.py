@@ -23,12 +23,3 @@ class Obstacle:
         """
         surface.blit(self.image, self.rect.topleft)
 
-    def collides_with(self, sprite_rect):
-        """
-        Kontrollerar om hindret kolliderar med en given sprite-rektangel.
-
-        :param sprite_rect: pygame.Rect för den kolliderande sprite:n.
-        :return:            True om rektanglarna överlappar, annars False.
-        """
-        return self.rect.colliderect(sprite_rect)
-
