@@ -124,12 +124,12 @@ class Battle:
         if name in ("M1 Abrams", "T-90"):
             hp   = 210
             dmg  = 35
-            fuel = 5000
+            fuel = 500
             img  = M1_ABRAMS_IMG if name == "M1 Abrams" else T90_IMG
         else:
             hp   = 155
             dmg  = 65
-            fuel = 2000
+            fuel = 200
             img  = SHERMAN_IMG if name.startswith("Sherman") else T34_IMG
 
         # Skapa tank och ge den max_fuel
