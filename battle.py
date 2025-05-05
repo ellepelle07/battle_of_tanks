@@ -243,7 +243,7 @@ class Battle:
                 elif self.projectile.x < 0 or self.projectile.x > self.screen_width or self.projectile.y > GROUND_LEVEL or self.projectile.y < 0:
                     self.__explode_projectile()
                 elif self.brick_wall.rect.colliderect(self.projectile.rect):
-                     self.__explode_projectile()
+                    self.__explode_projectile()
 
             # Explosioner
             for ex in self.explosions_active:
