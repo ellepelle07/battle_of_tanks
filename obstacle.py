@@ -13,7 +13,7 @@ class Obstacle:
         :param pos:   Tuple (x, y) som anger centrumposition i pixlar.
         """
         self.image = image
-        self.rect = self.image.get_rect(center=pos)
+        self.rect = self.image.get_rect(midbottom=pos)
 
     def draw_obstacle(self, surface):
         """

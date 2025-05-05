@@ -77,13 +77,13 @@ class Battle:
         self.screen = screen
         self.battle_sound = pygame.mixer.Sound("assets/sound/battle_sound.ogg")
         self.engine_sound = pygame.mixer.Sound("assets/sound/engine_sound.mp3")
-        puddle = pygame.image.load("assets/sprites/ice_frames.png")
+        brick_wall = pygame.image.load("assets/images/brick_wall.jpg")
 
-        self.puddle_img = pygame.transform.scale(puddle, (600, 150))  # Hårdkodad storlek
+        self.brick_wall_img = pygame.transform.scale(brick_wall, (50, 280))  # Hårdkodad storlek
         self.engine_playing = False
         self.clock = pygame.time.Clock()
         self.screen_width, self.screen_height = screen.get_size()
-        self.puddle = Obstacle(self.puddle_img,(self.screen_width // 2, GROUND_LEVEL))
+        self.brick_wall = Obstacle(self.brick_wall_img,(self.screen_width // 2, GROUND_LEVEL))
 
         self.current_phase: GamePhases = GamePhases.MOVE
         self.current_player = randint(1, 2)  # Slumpa vilken spelar som börjar
@@ -124,12 +124,12 @@ class Battle:
         if name in ("M1 Abrams", "T-90"):
             hp   = 210
             dmg  = 35
-            fuel = 500
+            fuel = 5000
             img  = M1_ABRAMS_IMG if name == "M1 Abrams" else T90_IMG
         else:
             hp   = 155
             dmg  = 65
-            fuel = 200
+            fuel = 2000
             img  = SHERMAN_IMG if name.startswith("Sherman") else T34_IMG
 
         # Skapa tank och ge den max_fuel
@@ -174,7 +174,7 @@ class Battle:
             mouse_down_btn = False
             active_tank = self.left_tank if self.current_player == 1 else self.right_tank
             self.screen.blit(background_image, (0, 0))
-            self.puddle.draw_obstacle(self.screen)
+            self.brick_wall.draw_obstacle(self.screen)
 
             # Rita tankarna
             self.left_tank.draw_tank(self.screen)
@@ -196,11 +196,11 @@ class Battle:
                 moved = None
                 if keys[pygame.K_a] or keys[pygame.K_LEFT]:
                     moved = active_tank.move(-1)
-                    if self.puddle.rect.colliderect(active_tank.rect):
+                    if self.brick_wall.rect.colliderect(active_tank.rect):
                         moved = active_tank.move(1)
                 if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
                     moved = active_tank.move(1)
-                    if self.puddle.rect.colliderect(active_tank.rect):
+                    if self.brick_wall.rect.colliderect(active_tank.rect):
                         moved = active_tank.move(-1)
 
                 if moved:  # Om rörelsen lyckades
@@ -237,13 +237,13 @@ class Battle:
                 self.projectile.update_projectile(dt)
                 target = self.right_tank if self.current_player == 1 else self.left_tank
                 if target.rect.colliderect(self.projectile.rect):
-                    #target.move(-5) if self.current_player == 1 else target.move(5)  <<<för push-back effekt>>>
+                        #target.move(-5) if self.current_player == 1 else target.move(5)  <<<för push-back effekt>>>
                     self.__explode_projectile()
                     target.take_damage(active_tank.damage)
                 elif self.projectile.x < 0 or self.projectile.x > self.screen_width or self.projectile.y > GROUND_LEVEL or self.projectile.y < 0:
                     self.__explode_projectile()
-                # elif self.projectile.y > GROUND_LEVEL:
-                #     self.__explode_projectile()
+                elif self.brick_wall.rect.colliderect(self.projectile.rect):
+                     self.__explode_projectile()
 
             # Explosioner
             for ex in self.explosions_active:
