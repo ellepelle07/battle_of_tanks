@@ -9,7 +9,7 @@ import explosions
 from enum import Enum
 from shared.constants import *
 from obstacle import Obstacle
-from random import randint
+import random
 
 # Inställningar
 AIM_LINE_LENGTH = 320
@@ -79,14 +79,14 @@ class Battle:
         self.engine_sound = pygame.mixer.Sound("assets/sound/engine_sound.mp3")
         brick_wall = pygame.image.load("assets/images/brick_wall.jpg")
 
-        self.brick_wall_img = pygame.transform.scale(brick_wall, (50, 280))  # Hårdkodad storlek
+        self.brick_wall_img = pygame.transform.scale(brick_wall, (50, 240))  # Storlek på objektet
         self.engine_playing = False
         self.clock = pygame.time.Clock()
         self.screen_width, self.screen_height = screen.get_size()
         self.brick_wall = Obstacle(self.brick_wall_img,(self.screen_width // 2, GROUND_LEVEL))
 
         self.current_phase: GamePhases = GamePhases.MOVE
-        self.current_player = randint(1, 2)  # Slumpa vilken spelar som börjar
+        self.current_player = random.randint(1, 2)  # Slumpa vilken spelar som börjar
         self.projectile = None
         self.explosions_active = []
         self.round_counter = 1
@@ -122,14 +122,14 @@ class Battle:
 
         # Sätt HP, damage och bränsle beroende på tank
         if name in ("M1 Abrams", "T-90"):
-            hp   = 210
+            hp   = 260
             dmg  = 35
             fuel = 500
             img  = M1_ABRAMS_IMG if name == "M1 Abrams" else T90_IMG
         else:
-            hp   = 155
+            hp   = 175
             dmg  = 65
-            fuel = 200
+            fuel = 210
             img  = SHERMAN_IMG if name.startswith("Sherman") else T34_IMG
 
         # Skapa tank och ge den max_fuel
@@ -228,6 +228,7 @@ class Battle:
 
             # Skott
             if self.current_phase == GamePhases.SHOOT:
+                self.engine_sound.stop()
                 if self.projectile is None:
                     self.projectile = active_tank.shoot()
 

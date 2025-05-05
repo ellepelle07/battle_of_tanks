@@ -38,7 +38,6 @@ class Menu:
         self.screen.blit(self.war_image, (0, 0))
         title_text = gui.Text("Battle of Tanks", "assets/fonts/gomarice_monkey_Area.ttf", 80, BLACK, 250, 100)
         title_text.draw_text(self.screen)
-        button_font = pygame.font.Font(None, 35)
 
         # Instruktionstexter
         instructions_text = [
@@ -54,8 +53,8 @@ class Menu:
 
         # Skapa knappar – notera att knappen för "Senaste Vinnare" nu bara skickar en signal
         self.buttons = [
-            gui.Button("Välj Stridsvagn", 300, 240, 200, 50, button_font),
-            gui.Button("Senaste Vinnare", 300, 310, 200, 50, button_font),
+            gui.Button("Välj Stridsvagn", 300, 240, 200, 50, None, 35),
+            gui.Button("Senaste Vinnare", 300, 310, 200, 50, None, 35),
         ]
 
         pygame.display.flip()

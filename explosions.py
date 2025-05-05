@@ -7,8 +7,8 @@ resources_loaded = False
 explosion_images = []
 explosion_sound: pygame.mixer.Sound
 
-# Lägger inte detta i initieringen eftersom det tar tid att ladda bilder från mina filer.
-# Därför vill man tima denna funktion så att den inte stör spelet.
+# Lägger inte detta i initieringen eftersom det tar tid att ladda bilder från mina filer och det skapas nya explotioner hela tiden.
+# Man vill inte behöva ladda in bilder varje gång. Därför vill man tima denna funktion så att den inte stör spelet.
 def load_explosion_resources():
     """
     Laddar explosioners bilder och ljud om de inte redan är laddade.
@@ -19,12 +19,12 @@ def load_explosion_resources():
     """
     global explosion_images, explosion_sound, resources_loaded
     if not resources_loaded:
-        # convert_alpha() - Ladda bilderna, konvertera dem för snabbare rendering och behåll transparens (alfa-kanal)
+        # kan lägga till convert_alpha() - Ladda bilderna, konvertera dem för snabbare rendering och behåll transparens (alfa-kanal)
         explosion_images = [
-            pygame.image.load("assets/sprites/explosion_1.png").convert_alpha(),
-            pygame.image.load("assets/sprites/explosion_2.png").convert_alpha(),
-            pygame.image.load("assets/sprites/explosion_3.png").convert_alpha(),
-            pygame.image.load("assets/sprites/explosion_4.png").convert_alpha()
+            pygame.image.load("assets/sprites/explosion_1.png"),
+            pygame.image.load("assets/sprites/explosion_2.png"),
+            pygame.image.load("assets/sprites/explosion_3.png"),
+            pygame.image.load("assets/sprites/explosion_4.png")
         ]
         explosion_sound = pygame.mixer.Sound("assets/sound/explosion.wav")
         resources_loaded = True
@@ -51,6 +51,7 @@ class Explosion:
         self.frame = 0
         self.timer = 0
         self.finished = False
+        self.rect = None
         explosion_sound.play()
 
     def update_explosions(self, dt):
@@ -77,6 +78,6 @@ class Explosion:
         :param screen: pygame.Surface där explosionen ritas.
         """
         if not self.finished:
-            image = self.images[self.frame]
-            screen.blit(image, (self.x - image.get_width() // 2, self.y - image.get_height() // 2))
-
+            image = self.images[self.frame] # Väljer vild fråm images baserat på vilken frame vi är på
+            self.rect = image.get_rect(center=(self.x, self.y))
+            screen.blit(image, self.rect)

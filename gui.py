@@ -5,18 +5,19 @@ class Button:
     """
     Representerar en knapp i spelet som man kan interagera med.
     """
-    def __init__(self, text, x, y, width, height, font):
+    def __init__(self, text, x, y, width, height, font_path, font_size):
         """
-        :param text:    Texten som visas på knappen
-        :param x:       X-koordinaten för knappens övre vänstra hörn
-        :param y:       X-koordinaten för knappens övre vänstra hörn
-        :param width:   Knappens bredd i pixlar
-        :param height:  Knappens bredd i pixlar
-        :param font:    Typsnittet som används för knapptexten
+        :param text:      Texten som visas på knappen
+        :param x:         X-koordinaten för knappens övre vänstra hörn
+        :param y:         X-koordinaten för knappens övre vänstra hörn
+        :param width:     Knappens bredd i pixlar
+        :param height:    Knappens bredd i pixlar
+        :param font_path: Typsnittet som används för knapptexten
+        :param font_size: Storleken på knapptexten
         """
         self.text = text
         self.rect = pygame.Rect(x, y, width, height)
-        self.font = font
+        self.font = pygame.font.Font(font_path, font_size)
 
     def draw(self, screen, is_selected):
         """
@@ -57,8 +58,6 @@ class Text:
         :param y:               Y-koordinaten för textens övre vänstra hörn.
         """
         self.text = text
-        self.font_path = font_path
-        self.font_size = font_size
         self.color = color
         self.x = x
         self.y = y

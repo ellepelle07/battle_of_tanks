@@ -35,13 +35,13 @@ class Projectile(pygame.sprite.Sprite):
         :param dt: Tidsdifferens sedan senaste uppdatering (sekunder).
         """
 # https://www.kaggle.com/code/dawith/python-for-kinematics-motion-diagram
-        g = 300  # pixels/s^2      # GRAVIATION
+        g = 300  # pixels/s^2       Gravitationsaccelerationen
         self.x += self.vx * dt                       # Horisontell förflyttning
-        self.y += self.vy * dt + 0.5 * g * dt * dt   # Kinematikformeln: Vertikal förflyttning med konstant acceleration
+        self.y += self.vy * dt + 0.5 * g * dt * dt   # Kinematikformeln: Beräknar vilken y position skottet baserat på tid(dt), acceleration(g) och begynnelsehastigheten i y-led(vy)
         self.vy += g * dt                            # Gravitationspåverkan på den vertikala hastigheten
 
         # Konvertera flyttal till heltal då pygame.Rect kräver heltalskoordinater
-        self.rect.center = (int(self.x), int(self.y))
+        self.rect.center = (self.x, self.y)
 
     def draw_projectile(self, screen):
         """

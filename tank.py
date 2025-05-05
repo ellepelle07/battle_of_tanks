@@ -66,7 +66,8 @@ class Tank(pygame.sprite.Sprite):
             if 0 <= (self.rect.centerx + dx) <= self.screen_width:
                 self.rect.centerx += dx
             return True  # Rörelse lyckades
-        return False  # Ingen rörelse på grund av bränslebrist
+        else:
+            return False  # Ingen rörelse på grund av bränslebrist
 
     def aim(self, mx, my):
         """

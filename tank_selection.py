@@ -84,7 +84,7 @@ class TankSelection:
 
         # Rita bakgrunder: vänster halva blå, höger halva röd
         self.screen.fill(BLUE, rect=pygame.Rect(0, 0, self.screen_width // 2, self.screen_height))
-        self.screen.fill(RED, rect=pygame.Rect(self.screen_width // 2, 0, self.screen_width // 2, self.screen_height))
+        self.screen.fill(RED, rect=pygame.Rect(self.screen_width // 2, 0, self.screen_width, self.screen_height))
 
         # Rita texter
         self.usa_label.draw_text(self.screen)
